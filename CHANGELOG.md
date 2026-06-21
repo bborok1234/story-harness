@@ -6,6 +6,11 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **P3 (in progress) — local web play surface** (`web/`, per ADR-0002). A local Hono bridge spawns the
+  user's own `claude` headless and streams **narration-only** + a live state HUD over SSE (tool diffs
+  hidden); Vite + React + TS frontend; localhost-only with Origin/Host allowlist (DNS-rebinding guard);
+  child env sanitized to stay on the subscription; MOCK mode. Typecheck/build + MOCK smoke + security
+  guards verified. Live real-claude play is the next user step.
 - **P2 — Guardrails + authoring.**
   - Per-story hooks in `.claude/settings.json`: `SessionStart` (orientation inject) and `Stop`
     (autosave `state.json`+`log.md` to `saves/_autosave/`). Scoped to the story dir, so the repo root

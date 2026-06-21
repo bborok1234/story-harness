@@ -141,7 +141,7 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 |-------|--------|---------|----------|
 | 1. MVP distribution | ✅ done | 2026-06-21 | user playtest confirmed read→persist→narrate, state/log mutated, Korean prose; `90abecd`+ pushed; CI green |
 | 2. Guardrails + authoring | ✅ done | 2026-06-21 | user-verified live: /new-story, /stories, /new-character, /lint (lore-keeper: hard-clean + 3 soft issues), play read→persist→narrate; workspace model added |
-| 3. Local web play surface | ⬜ not started | — | direction set by [ADR-0001](../decisions/0001-surface-engine-and-direction.md) (was "CLI wrapper") |
+| 3. Local web play surface | 🔄 in-progress | 2026-06-21 | bridge+React built ([ADR-0002](../decisions/0002-web-stack.md)); typecheck/build + MOCK smoke + security guards green; live real-claude play pending (user) |
 | 4. Author workspace + dynamic UI | ⬜ not started | — | per ADR-0001 |
 | 5. Interop & ecosystem | ⬜ not started | — | — |
 
@@ -195,10 +195,14 @@ plays a scene rendering **only narration + a live state HUD** — no tool diffs 
 own subscription/key; no hosting.
 **Verified by:** play a turn in the browser; assert the rendered transcript contains no tool-call/diff
 artifacts and the state HUD reflects `state.json`.
-- [ ] localhost server that drives `claude -p --output-format stream-json` and filters the event
-  stream to assistant-narration only (hide tool_use/tool_result/thinking)
-- [ ] single-page UI: narration view + input + small state HUD (relationships/turn from `state.json`)
-- [ ] one ambient liveness indicator; `unset ANTHROPIC_API_KEY` guard
+- [x] localhost Hono bridge drives `claude -p --output-format stream-json`, re-emits SSE filtered to
+  assistant-narration only (drops tool_use/tool_result/thinking). `web/server/bridge.ts`
+- [x] single-page React UI: narration feed + input + state HUD (turn/world/player/relationships).
+  `web/src/` (Vite + React + TS) — typecheck + build pass
+- [x] ambient liveness indicator; child env sanitized (deletes `ANTHROPIC_API_KEY`/`ANTHROPIC_AUTH_TOKEN`)
+- [x] security: localhost-only + Origin/Host allowlist (DNS-rebinding guard) — smoke-verified
+- [x] MOCK mode + smoke test (info/state/SSE + forbidden host/origin) green
+- [ ] live real-claude play in browser (user): `cd web && npm install && unset ANTHROPIC_API_KEY && npm run dev`
 - [ ] PLAY mode only (AUTHOR mode is P4)
 
 ### Phase 4 — Author workspace + dynamic UI
