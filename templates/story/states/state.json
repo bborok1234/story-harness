@@ -1,0 +1,12 @@
+{
+  "turn": 0,
+  "world": {
+    "reputation": 50
+  },
+  "relationships": {
+    "<character>": {
+      "trust": 0,
+      "affection": 0
+    }
+  }
+}

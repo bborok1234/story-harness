@@ -1,0 +1,12 @@
+{
+  "name": "dance-prince",
+  "story": "examples/imperial-ball",
+  "input": "I cross the floor and ask Prince Aurelio for the first dance, offering my hand with a sincere, steady smile.",
+  "assert": {
+    "state_increase": ["relationships.prince.trust"],
+    "turn_advanced": true,
+    "log_appended": true,
+    "read_files": ["characters/prince.md"],
+    "persist_before_narrate": true
+  }
+}

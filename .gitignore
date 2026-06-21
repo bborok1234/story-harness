@@ -1,0 +1,13 @@
+# local Claude Code settings (per-developer)
+.claude/settings.local.json
+
+# eval run artifacts
+.eval-run/
+evals/last-run.jsonl
+evals/.before.json
+
+# story saves (generated during play)
+**/saves/
+
+# OS
+.DS_Store

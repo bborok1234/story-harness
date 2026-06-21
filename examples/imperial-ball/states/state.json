@@ -1,0 +1,16 @@
+{
+  "turn": 0,
+  "world": {
+    "reputation": 50
+  },
+  "relationships": {
+    "prince": {
+      "trust": 20,
+      "affection": 10
+    },
+    "heroine": {
+      "trust": 50,
+      "affection": 30
+    }
+  }
+}
