@@ -6,8 +6,9 @@
 evals/last-run.jsonl
 evals/.before.json
 
-# story saves (generated during play)
+# story saves + web-session transcript (generated during play)
 **/saves/
+**/.session/
 
 # your stories (your content; not part of the distribution) — keep only the README
 /stories/*

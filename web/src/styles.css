@@ -57,4 +57,7 @@ body {
 .bar-label { color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bar-track { height: 6px; background: #2c2b36; border-radius: 4px; overflow: hidden; }
 .bar-fill { display: block; height: 100%; background: var(--accent); }
-.bar-val { text-align: right; color: var(--dim); }
+.bar-val { text-align: right; color: var(--dim); white-space: nowrap; }
+.delta { margin-left: 5px; font-size: 11px; }
+.delta.up { color: #79c879; }
+.delta.down { color: #e08a8a; }

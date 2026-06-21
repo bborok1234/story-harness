@@ -6,14 +6,20 @@ import { Hud, type StoryState } from "./components/Hud";
 export function App() {
   const [feed, setFeed] = useState<Beat[]>([]);
   const [hud, setHud] = useState<StoryState>({});
+  const [deltas, setDeltas] = useState<Record<string, number>>({});
   const [story, setStory] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
   const [input, setInput] = useState("");
   const sessionId = useRef<string | undefined>(undefined);
 
+  // Restore on load: prior transcript + sessionId, then current state.
   useEffect(() => {
     fetch("/api/info").then((r) => r.json()).then((d) => setStory(d.story)).catch(() => {});
+    fetch("/api/transcript").then((r) => r.json()).then((d) => {
+      if (Array.isArray(d.beats)) setFeed(d.beats);
+      if (d.sessionId) sessionId.current = d.sessionId;
+    }).catch(() => {});
     fetch("/api/state").then((r) => r.json()).then(setHud).catch(() => {});
   }, []);
 
@@ -23,6 +29,7 @@ export function App() {
     setInput("");
     setBusy(true);
     setStatus("composing");
+    setDeltas({});
     setFeed((f) => [...f, { role: "player", text: t }, { role: "gm", text: "" }]);
     try {
       for await (const ev of postSSE("/api/play", { input: t, sessionId: sessionId.current })) {
@@ -32,6 +39,8 @@ export function App() {
             c[c.length - 1] = { role: "gm", text: c[c.length - 1].text + ev.data };
             return c;
           });
+        } else if (ev.event === "delta") {
+          try { setDeltas(JSON.parse(ev.data)); } catch { /* ignore */ }
         } else if (ev.event === "state") {
           try { setHud(JSON.parse(ev.data)); } catch { /* ignore */ }
         } else if (ev.event === "done") {
@@ -80,7 +89,7 @@ export function App() {
         </form>
       </main>
       <aside className="sidebar">
-        <Hud state={hud} />
+        <Hud state={hud} deltas={deltas} />
       </aside>
     </div>
   );

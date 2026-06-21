@@ -6,6 +6,11 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Deepening — Track B (play experience, web).** Narration now **streams token-by-token**
+  (`--include-partial-messages`). The browser **restores on reload**: the bridge persists each turn to
+  `.session/transcript.jsonl` + the session `id`, and `/api/transcript` replays the feed and resumes
+  the Claude session. The HUD shows **state deltas** (±N) — the bridge diffs `state.json` before/after a
+  turn and emits a `delta` event. (Verified via typecheck/build + MOCK smoke.)
 - **Deepening — Track A (memory & continuity).** Memory tiers so long stories stay coherent: a
   `Memory` file type, `memory/index.md` + `memory/chapters/NN.md`, and a `/compact` skill that rolls
   old `log.md` beats into chapter summaries (synopsis + durable facts + verbatim importance≥8 beats).

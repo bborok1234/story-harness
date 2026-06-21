@@ -5,7 +5,7 @@ export type StoryState = {
   relationships?: Record<string, Record<string, number>>;
 };
 
-function Bar({ label, value }: { label: string; value: number }) {
+function Bar({ label, value, delta }: { label: string; value: number; delta?: number }) {
   const pct = Math.max(0, Math.min(100, value));
   return (
     <div className="bar">
@@ -13,12 +13,15 @@ function Bar({ label, value }: { label: string; value: number }) {
       <span className="bar-track">
         <span className="bar-fill" style={{ width: `${pct}%` }} />
       </span>
-      <span className="bar-val">{value}</span>
+      <span className="bar-val">
+        {value}
+        {delta ? <span className={delta > 0 ? "delta up" : "delta down"}>{delta > 0 ? `+${delta}` : delta}</span> : null}
+      </span>
     </div>
   );
 }
 
-export function Hud({ state }: { state: StoryState }) {
+export function Hud({ state, deltas = {} }: { state: StoryState; deltas?: Record<string, number> }) {
   const { turn, world, player, relationships } = state;
   const has = (o?: object) => o && Object.keys(o).length > 0;
   return (
@@ -29,13 +32,13 @@ export function Hud({ state }: { state: StoryState }) {
       {has(player) && (
         <section>
           <h3>나</h3>
-          {Object.entries(player!).map(([k, v]) => <Bar key={k} label={k} value={v} />)}
+          {Object.entries(player!).map(([k, v]) => <Bar key={k} label={k} value={v} delta={deltas[`player.${k}`]} />)}
         </section>
       )}
       {has(world) && (
         <section>
           <h3>세계</h3>
-          {Object.entries(world!).map(([k, v]) => <Bar key={k} label={k} value={v} />)}
+          {Object.entries(world!).map(([k, v]) => <Bar key={k} label={k} value={v} delta={deltas[`world.${k}`]} />)}
         </section>
       )}
       {has(relationships) && (
@@ -44,7 +47,7 @@ export function Hud({ state }: { state: StoryState }) {
           {Object.entries(relationships!).map(([who, vals]) => (
             <div key={who} className="rel">
               <div className="rel-name">{who}</div>
-              {Object.entries(vals).map(([k, v]) => <Bar key={k} label={k} value={v} />)}
+              {Object.entries(vals).map(([k, v]) => <Bar key={k} label={k} value={v} delta={deltas[`${who}.${k}`]} />)}
             </div>
           ))}
         </section>

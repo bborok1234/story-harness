@@ -236,9 +236,12 @@ Refining the built features (P1–P3) is the priority now. Two tracks, core-deep
 - [ ] A3 retrieval scoring (recency+importance+entity) · A5 consequences queue (later in track)
 
 ### Track B — play experience (web)
-- [ ] B1 token streaming (`--include-partial-messages` → typed-out narration)
-- [ ] B3 reload restore (persist transcript + sessionId; replay feed on load)
-- [ ] B4 state-delta highlights in HUD · B5 multi-story picker
+- [x] B1 token streaming (`--include-partial-messages` → narration typed out token-by-token; verified)
+- [x] B3 reload restore (bridge persists `.session/transcript.jsonl` + `id`; `/api/transcript` replays
+  the feed + resumes the session on load; verified)
+- [x] B4 state-delta highlights (bridge diffs state before/after → `delta` SSE event; HUD shows ±N)
+- [ ] live real-claude play (user): confirm typed narration + reload restore + deltas in browser
+- [ ] B5 multi-story picker (later in track)
 
 ## Risks & Open Questions
 - **Risk:** state drift (agent writes inconsistent values). → Mitigation: enum + legal-transition
