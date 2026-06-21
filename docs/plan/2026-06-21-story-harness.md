@@ -5,9 +5,9 @@ status: in-progress       # draft | approved | in-progress | on-hold | done | ab
 created: 2026-06-21
 updated: 2026-06-21
 owner: limmir88@gmail.com
-version: 1.2
+version: 1.3
 tags: [harness, roleplay, claude-code, mvp]
-related: []              # ADRs, tracking issues, PRs — fill as they appear
+related: [https://github.com/bborok1234/story-harness]  # repo
 supersedes: null
 superseded-by: null
 ---
@@ -139,7 +139,7 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 
 | Phase | Status | Updated | Evidence |
 |-------|--------|---------|----------|
-| 1. MVP distribution | 🔄 in-progress | 2026-06-21 | artifacts built; L0 green; live L1 + playtest pending (user) |
+| 1. MVP distribution | 🔄 in-progress | 2026-06-21 | `90abecd` pushed to [repo](https://github.com/bborok1234/story-harness); CI L0 green; live L1 + playtest pending (user) |
 | 2. Guardrails + authoring | ⬜ not started | — | — |
 | 3. CLI wrapper + plugin packaging | ⬜ not started | — | — |
 | 4. Interop (card import, graph viz) | ⬜ not started | — | — |
@@ -200,6 +200,9 @@ graph renders.
   resolve during P1 build (persona → output-style, procedure → skill).
 
 ## Changelog
+- 2026-06-21 (v1.3): Published to GitHub (`bborok1234/story-harness`, public, MIT). OSS setup
+  (LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, CHANGELOG, issue/PR templates) + CI workflow
+  running `scripts/check.sh` — first run green. First commit `90abecd`.
 - 2026-06-21 (v1.2): P1 build — constitution + AGENTS.md symlink + storyteller output-style + skills
   (storyteller/recap/save) + OKF templates + imperial-ball demo + `scripts/check.sh` (L0 green) +
   `evals/` L1 runner & `dance-prince` scenario. Status → in-progress. Pending (user): live L1 run +
