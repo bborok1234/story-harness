@@ -41,4 +41,5 @@ Storyteller가 이렇게 합니다:
 거대 프롬프트에 욱여넣은 게 없습니다. 에이전트가 필요할 때 파일을 탐색했어요 — Claude Code가
 코드베이스를 읽는 방식 그대로. 관계와 세계는 열어서 고칠 수 있는 평범한 파일에 있습니다.
 
-다음: [내 스토리 만들기](writing-a-story.ko.md).
+다음: [스토리 관리](managing-stories.ko.md)(어디 사는지, 생성/전환)와
+[내 스토리 만들기](writing-a-story.ko.md).

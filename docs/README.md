@@ -10,6 +10,7 @@ Story Harness turns Claude Code into a file-backed roleplay engine. Start here.
 |---|---|
 | Install and play your first scene | [guide/getting-started](guide/getting-started.md) |
 | Build your own story | [guide/writing-a-story](guide/writing-a-story.md) |
+| Create / list / switch stories | [guide/managing-stories](guide/managing-stories.md) |
 | Set the game-master voice | [guide/output-style](guide/output-style.md) |
 | Understand the story file format (OKF) | [reference/file-format](reference/file-format.md) |
 | Know what skills/commands/hooks exist | [reference/skills-and-commands](reference/skills-and-commands.md) |

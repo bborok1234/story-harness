@@ -9,5 +9,9 @@ evals/.before.json
 # story saves (generated during play)
 **/saves/
 
+# your stories (your content; not part of the distribution) — keep only the README
+/stories/*
+!/stories/README.md
+
 # OS
 .DS_Store

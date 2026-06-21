@@ -173,7 +173,9 @@ template diff · continuity-lint flags a seeded contradiction (L2) · skill-trig
   (autosave to `saves/_autosave/`) — **empirically verified firing** (cwd=story dir, `CLAUDE_PROJECT_DIR`
   =story dir; repo root unaffected). `PostToolUse` persist-audit **dropped**: the storyteller skill
   already enforces persist-before-narrate (confirmed in playtest); revisit only if drift observed.
-- [x] skill `new-story` (scaffold from template + interview)
+- [x] workspace model: `stories/<name>/` home (git-ignored) + `/stories` manager + rule "manage from
+  root, play from story folder" — removes the "where do stories live?" confusion
+- [x] skill `new-story` (location-independent: scaffolds into `stories/`, prints play command)
 - [x] skill `new-character` (OKF character file)
 - [x] sub-agent `lore-keeper` (history → deltas + continuity verdict, read-only)
 - [x] continuity-lint: `/lint` skill delegating to `lore-keeper`

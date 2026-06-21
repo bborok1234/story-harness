@@ -16,7 +16,8 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 | `storyteller` | auto | The turn loop: **CONTEXT → DECIDE → PERSIST → NARRATE**. Auto-triggers when you're in a story dir and act in character. |
 | `recap` | `/recap` | A "previously on…" catch-up from `SCENE.md` + `state.json` + recent `log.md`. |
 | `save` | `/save` | Snapshots the story to `saves/<timestamp>/`. |
-| `new-story` | `/new-story` | Scaffold a new story from `templates/story/`. |
+| `new-story` | `/new-story` | Scaffold a new story into `stories/<name>/` + print how to play it. |
+| `stories` | `/stories` | List your stories and show how to play/create/switch. |
 | `new-character` | `/new-character` | Add an OKF character file to the current story. |
 | `lint` | `/lint` | Continuity check — delegates to the `lore-keeper` sub-agent. |
 

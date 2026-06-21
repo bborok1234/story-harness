@@ -10,6 +10,10 @@ All notable changes to this project are documented here. Format follows
   - Per-story hooks in `.claude/settings.json`: `SessionStart` (orientation inject) and `Stop`
     (autosave `state.json`+`log.md` to `saves/_autosave/`). Scoped to the story dir, so the repo root
     stays a normal coding assistant. (Empirically verified firing.)
+  - **Workspace model:** your stories live in `stories/<name>/` (git-ignored), separate from the
+    `examples/` demo. Rule: *manage from the harness root, play from the story folder; one story =
+    one folder = one session.* `/new-story` now scaffolds into `stories/` (location-independent) and
+    prints the exact play command; new `/stories` skill lists/explains. Guide: `docs/guide/managing-stories`.
   - `/new-story` and `/new-character` authoring skills.
   - `lore-keeper` read-only sub-agent (history → facts/deltas + continuity verdict) and a `/lint`
     continuity check that delegates to it.

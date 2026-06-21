@@ -40,4 +40,5 @@ The Storyteller will:
 Nothing was stuffed into a giant prompt. The agent navigated files on demand — the same way Claude
 Code reads a codebase. Your relationships and the world live in plain files you can open and edit.
 
-Next: [write your own story](writing-a-story.md).
+Next: [manage your stories](managing-stories.md) (where they live, how to create/switch) and
+[write your own story](writing-a-story.md).

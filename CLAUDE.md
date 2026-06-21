@@ -13,10 +13,17 @@ This file is the constitution — short, always-on. Behavior lives in skills; de
 | `.claude/skills/{recap,save,new-story,new-character}/` | user commands |
 | `.claude/agents/lore-keeper.md` | sub-agent: digests long history → deltas + continuity |
 | `templates/story/` | scaffold a new story copies this |
-| `examples/imperial-ball/` | runnable demo |
+| `examples/imperial-ball/` | bundled demo (a sample, not the player's saves) |
+| `stories/<name>/` | the player's own stories (git-ignored). One story = one folder = one session |
 | `scripts/check.sh` | static checks (L0) |
 | `evals/` | headless scenario tests (L1) |
 | `docs/plan/` | trackable plans |
+
+## Workspace rule
+
+**Manage from the harness root; play from the story folder.** Create with `/new-story` (lands in
+`stories/<name>/`), list with `/stories`, play with `cd stories/<name> && claude`. The demo in
+`examples/` is a sample. Don't scaffold the player's stories into `examples/`.
 
 ## Story file format (OKF)
 
