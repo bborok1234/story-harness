@@ -3,6 +3,8 @@
 [![check](https://github.com/bborok1234/story-harness/actions/workflows/check.yml/badge.svg)](https://github.com/bborok1234/story-harness/actions/workflows/check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+**English** | [한국어](README.ko.md)
+
 **What if character chat worked like Claude Code?**
 
 Story Harness turns Claude Code into an interactive roleplay/storytelling engine — not by building a
@@ -51,8 +53,13 @@ cp -R templates/story my-story && cd my-story && claude
 
 ## Status
 
-P1 (MVP) — see [`docs/plan/2026-06-21-story-harness.md`](docs/plan/2026-06-21-story-harness.md) for the
-plan and progress. Built on Claude Code; portable toward Codex/OpenCode via `AGENTS.md`.
+P1 (MVP) — see the [roadmap](ROADMAP.md) and the
+[plan](docs/plan/2026-06-21-story-harness.md) for progress. Built on Claude Code; portable toward
+Codex/OpenCode via `AGENTS.md`.
+
+## Docs
+
+Full documentation in [`docs/`](docs/README.md) — guides and reference. Korean: [한국어 문서](docs/README.ko.md).
 
 ## Contributing & license
 

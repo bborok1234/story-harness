@@ -80,11 +80,13 @@ for p in glob.glob(".claude/output-styles/*.md") + glob.glob(".claude/agents/*.m
     if not re.search(r"^description:\s*\S", fm, re.M):
         errors.append(f"{p}: missing 'description'")
 
-# 5. broken relative markdown links in story files (ignore code fences + placeholders)
+# 5. broken relative markdown links (story files + docs + root *.md); ignore code fences + placeholders
 link_re = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-for p in story_md:
+link_md = sorted(set(story_md + glob.glob("*.md") + glob.glob("docs/**/*.md", recursive=True)))
+for p in link_md:
     base = os.path.dirname(p)
-    body = re.sub(r"```.*?```", "", read(p), flags=re.S)
+    body = re.sub(r"```.*?```", "", read(p), flags=re.S)   # strip fenced code
+    body = re.sub(r"`[^`\n]*`", "", body)                  # strip inline code (illustrative links)
     for m in link_re.finditer(body):
         t = m.group(1).strip().split("#")[0]
         if not t or t.startswith(("http", "<")) or "<" in t or ">" in t:

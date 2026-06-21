@@ -29,12 +29,20 @@ Run a live scenario when you change play behavior: `./evals/run.sh dance-prince`
 - **Something that must run every time** → a hook in `.claude/settings.json`.
 - **A new example story** → a folder under `examples/` following `templates/story/`.
 
+## Internationalization
+
+English is the **source of truth**. Korean docs are `*.ko.md` siblings (e.g. `README.ko.md`,
+`docs/guide/getting-started.ko.md`). If you change an English doc, update its `.ko.md` sibling in the
+same PR — or open a follow-up issue labeled `i18n`. Keep the top-of-file language switcher identical
+across siblings. Filenames stay ASCII (Korean goes in the content, not the filename).
+
 ## PR checklist
 
 - [ ] `./scripts/check.sh` is green
 - [ ] `CLAUDE.md` still ≤120 lines (if touched)
 - [ ] New skills have a triggering `description`
 - [ ] Updated the relevant `index.md` / docs
+- [ ] Updated Korean `.ko.md` siblings if English docs changed (or noted as follow-up)
 - [ ] If it changes the plan's scope, updated `docs/plan/`
 
 By contributing you agree your work is licensed under the [MIT License](LICENSE).

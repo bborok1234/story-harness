@@ -64,6 +64,7 @@ Crown prince. Reserved, political, proud. Rival of [Duke Aldric](aldric.md).
 - How a turn is played → skill `storyteller`.
 - How to start/recap/save → skills `new-story` / `recap` / `save`.
 - How state is verified → `scripts/check.sh`, `evals/`.
+- User & contributor docs → `docs/README.md` (guides + reference; Korean `*.ko.md` siblings).
 - The full design + progress → `docs/plan/2026-06-21-story-harness.md`.
 
 ## Working if

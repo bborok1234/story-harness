@@ -14,3 +14,4 @@
 - [ ] `CLAUDE.md` still ≤120 lines (if touched)
 - [ ] New skills have a triggering `description`
 - [ ] Updated relevant `index.md` / docs / `docs/plan/`
+- [ ] Updated Korean `.ko.md` siblings if English docs changed

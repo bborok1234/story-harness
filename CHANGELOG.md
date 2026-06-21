@@ -15,6 +15,10 @@ All notable changes to this project are documented here. Format follows
   - `examples/imperial-ball/` runnable demo.
   - `scripts/check.sh` (L0 static checks) and `evals/` L1 scenario runner with `dance-prince`.
   - Open-source project setup (LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, CI).
+- **Docs & i18n.** `docs/` split into `guide/` + `reference/` with a `docs/README.md` index; root
+  `ROADMAP.md`. Bilingual docs (English source of truth + Korean `*.ko.md` siblings, `README.ko.md`)
+  with a language switcher. `scripts/check.sh` now link-checks docs too. Structure modeled on
+  `oh-my-openagent` / lazycodex, kept minimal (no website).
 
 See [`docs/plan/2026-06-21-story-harness.md`](docs/plan/2026-06-21-story-harness.md) for the roadmap
 (P2 guardrails/authoring, P3 CLI wrapper + plugin packaging, P4 interop).
