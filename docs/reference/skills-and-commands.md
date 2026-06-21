@@ -16,6 +16,9 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 | `storyteller` | auto | The turn loop: **CONTEXT → DECIDE → PERSIST → NARRATE**. Auto-triggers when you're in a story dir and act in character. |
 | `recap` | `/recap` | A "previously on…" catch-up from `SCENE.md` + `state.json` + recent `log.md`. |
 | `save` | `/save` | Snapshots the story to `saves/<timestamp>/`. |
+| `new-story` | `/new-story` | Scaffold a new story from `templates/story/`. |
+| `new-character` | `/new-character` | Add an OKF character file to the current story. |
+| `lint` | `/lint` | Continuity check — delegates to the `lore-keeper` sub-agent. |
 
 User commands are skills with `disable-model-invocation: true`. Auto skills trigger from their
 `description`. Skills live in `.claude/skills/<name>/SKILL.md`.
@@ -31,11 +34,21 @@ User commands are skills with `disable-model-invocation: true`. Auto skills trig
 
 The cardinal rule: **persist before you narrate.**
 
-## Planned (P2)
+## Sub-agents
 
-- **Sub-agent `lore-keeper`** — reads long history in an isolated context, returns just the deltas +
-  a continuity verdict.
-- **Hooks** (`.claude/settings.json`) — `SessionStart` loads state, `Stop` autosaves + appends the
-  log, `PostToolUse` audits persist-before-narrate. Hooks are deterministic rails, not advice.
+- **`lore-keeper`** (`.claude/agents/lore-keeper.md`) — reads the full history in an isolated context
+  and returns only facts/deltas + a continuity verdict. Read-only. Used by `/lint`.
+
+## Hooks
+
+Story directories carry a `.claude/settings.json` with deterministic hooks (they run every time and
+can't be skipped by the model):
+
+- **`SessionStart`** — injects a one-line orientation so a resumed session knows it's mid-story.
+- **`Stop`** — autosaves `state.json` + `log.md` to `saves/_autosave/` after each turn.
+
+Hooks are scoped per story (settings resolve from the working directory), so the harness repo root
+stays a normal coding assistant. A story's hooks run shell commands on open — only play stories you
+trust (see [SECURITY.md](../../SECURITY.md)).
 
 See the [roadmap](../../ROADMAP.md).

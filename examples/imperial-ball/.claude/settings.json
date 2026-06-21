@@ -1,3 +1,11 @@
 {
-  "outputStyle": "storyteller"
+  "outputStyle": "storyteller",
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "test -f SCENE.md && echo 'You are resuming an interactive story. Read SCENE.md, states/state.json, and the tail of log.md, then stay in character.'" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "mkdir -p saves/_autosave && cp states/state.json log.md saves/_autosave/ 2>/dev/null; true" } ] }
+    ]
+  }
 }

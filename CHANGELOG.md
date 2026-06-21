@@ -5,6 +5,16 @@ All notable changes to this project are documented here. Format follows
 
 ## [Unreleased]
 
+### Added
+- **P2 — Guardrails + authoring.**
+  - Per-story hooks in `.claude/settings.json`: `SessionStart` (orientation inject) and `Stop`
+    (autosave `state.json`+`log.md` to `saves/_autosave/`). Scoped to the story dir, so the repo root
+    stays a normal coding assistant. (Empirically verified firing.)
+  - `/new-story` and `/new-character` authoring skills.
+  - `lore-keeper` read-only sub-agent (history → facts/deltas + continuity verdict) and a `/lint`
+    continuity check that delegates to it.
+  - `scripts/check.sh` link-check covers docs; `SECURITY.md` notes story-settings hooks run code.
+
 ### Fixed
 - Output-style activation: `/output-style` was removed in Claude Code v2.1.91. Stories now ship a
   per-story `.claude/settings.json` (`outputStyle: storyteller`) so the GM voice **auto-applies** when

@@ -139,8 +139,8 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 
 | Phase | Status | Updated | Evidence |
 |-------|--------|---------|----------|
-| 1. MVP distribution | 🔄 in-progress | 2026-06-21 | `90abecd` pushed to [repo](https://github.com/bborok1234/story-harness); CI L0 green; live L1 + playtest pending (user) |
-| 2. Guardrails + authoring | ⬜ not started | — | — |
+| 1. MVP distribution | ✅ done | 2026-06-21 | user playtest confirmed read→persist→narrate, state/log mutated, Korean prose; `90abecd`+ pushed; CI green |
+| 2. Guardrails + authoring | 🔄 in-progress | 2026-06-21 | hooks (SessionStart/Stop) verified firing; new-story/new-character/lint skills + lore-keeper agent built; live scaffold/lint verification pending (user) |
 | 3. CLI wrapper + plugin packaging | ⬜ not started | — | — |
 | 4. Interop (card import, graph viz) | ⬜ not started | — | — |
 
@@ -168,11 +168,15 @@ log append, persist-before-narrate order, `prince.md` read + L3 manual playtest.
 contradiction is caught by continuity-lint.
 **Verified by:** stream-json hook events + audit-log file present (hooks) · `/new-story` output ==
 template diff · continuity-lint flags a seeded contradiction (L2) · skill-trigger should/near-miss set.
-- [ ] hooks in `settings.json`: `SessionStart` (load state), `Stop` (autosave + append log), `PostToolUse` (persist-before-narrate audit)
-- [ ] skill `new-story` (scaffold from template)
-- [ ] skill `new-character` (OKF character file)
-- [ ] sub-agent `lore-keeper` (history → deltas + continuity verdict)
-- [ ] continuity-lint pass (Karpathy lint: contradictions, dead chars acting, orphan threads)
+- [x] hooks in per-story `.claude/settings.json`: `SessionStart` (orientation inject), `Stop`
+  (autosave to `saves/_autosave/`) — **empirically verified firing** (cwd=story dir, `CLAUDE_PROJECT_DIR`
+  =story dir; repo root unaffected). `PostToolUse` persist-audit **dropped**: the storyteller skill
+  already enforces persist-before-narrate (confirmed in playtest); revisit only if drift observed.
+- [x] skill `new-story` (scaffold from template + interview)
+- [x] skill `new-character` (OKF character file)
+- [x] sub-agent `lore-keeper` (history → deltas + continuity verdict, read-only)
+- [x] continuity-lint: `/lint` skill delegating to `lore-keeper`
+- [ ] live verification (user): `/new-story` scaffolds; `/lint` catches a seeded contradiction
 
 ### Phase 3 — CLI wrapper + plugin packaging
 **Definition of Done:** a `story` command drives `claude` headless for a clean play UX; the harness
