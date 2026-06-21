@@ -27,6 +27,9 @@ it. Stories are kept separate from the bundled demo (`examples/`) — never scaf
 5. **Fill the scaffold** (replace every `<placeholder>`): `index.md` (title + premise), `SCENE.md`
    (opening location/mood/active characters/goal/events), one `characters/<name>.md` per NPC (linked
    from `characters/index.md`), `states/state.json` (real characters, `turn: 0`), `log.md` opening line.
+   The copied template files already exist, so **Read each one before you Edit it** (Claude Code
+   requires a Read before editing an existing file), or replace it wholesale with `Write`. Brand-new
+   NPC/world files don't need a prior Read.
 6. **Verify:** run `"$ROOT/scripts/check.sh"` if present.
 7. **Print the play command, exactly:**
    > Created `stories/<slug>/`. To play: `cd "$STORY_HOME/<slug>" && claude`

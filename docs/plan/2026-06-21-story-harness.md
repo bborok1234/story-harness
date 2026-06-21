@@ -5,7 +5,7 @@ status: in-progress       # draft | approved | in-progress | on-hold | done | ab
 created: 2026-06-21
 updated: 2026-06-21
 owner: limmir88@gmail.com
-version: 1.4
+version: 1.5
 tags: [harness, roleplay, claude-code, mvp]
 related: [https://github.com/bborok1234/story-harness]  # repo
 supersedes: null
@@ -140,7 +140,7 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 | Phase | Status | Updated | Evidence |
 |-------|--------|---------|----------|
 | 1. MVP distribution | ✅ done | 2026-06-21 | user playtest confirmed read→persist→narrate, state/log mutated, Korean prose; `90abecd`+ pushed; CI green |
-| 2. Guardrails + authoring | 🔄 in-progress | 2026-06-21 | hooks (SessionStart/Stop) verified firing; new-story/new-character/lint skills + lore-keeper agent built; live scaffold/lint verification pending (user) |
+| 2. Guardrails + authoring | ✅ done | 2026-06-21 | user-verified live: /new-story, /stories, /new-character, /lint (lore-keeper: hard-clean + 3 soft issues), play read→persist→narrate; workspace model added |
 | 3. Local web play surface | ⬜ not started | — | direction set by [ADR-0001](../decisions/0001-surface-engine-and-direction.md) (was "CLI wrapper") |
 | 4. Author workspace + dynamic UI | ⬜ not started | — | per ADR-0001 |
 | 5. Interop & ecosystem | ⬜ not started | — | — |
@@ -179,7 +179,9 @@ template diff · continuity-lint flags a seeded contradiction (L2) · skill-trig
 - [x] skill `new-character` (OKF character file)
 - [x] sub-agent `lore-keeper` (history → deltas + continuity verdict, read-only)
 - [x] continuity-lint: `/lint` skill delegating to `lore-keeper`
-- [ ] live verification (user): `/new-story` scaffolds; `/lint` catches a seeded contradiction
+- [x] live verification (user): `/new-story` scaffolded `stories/wuxia-idol/` (check.sh green, no
+  placeholders); `/stories` listed it; `/new-character` added + registered + entered scene; `/lint`
+  (via lore-keeper) returned hard-clean + 3 correct soft issues; play did read→persist→narrate
 
 > **Direction revised by [ADR-0001](../decisions/0001-surface-engine-and-direction.md).** P3 pivots
 > from a CLI/TUI wrapper to a **local web** play surface; P4 becomes the author workspace + dynamic UI;
@@ -227,6 +229,10 @@ graph renders; the harness packages as a plugin.
   resolve during P1 build (persona → output-style, procedure → skill).
 
 ## Changelog
+- 2026-06-21 (v1.5): **P2 done** — user-verified live (wuxia-idol story): `/new-story`, `/stories`,
+  `/new-character` + scene entry, `/lint` (lore-keeper hard-clean + 3 correct soft issues), and play
+  doing read→persist→narrate. Polished `new-story` (Read-before-Edit on copied template files);
+  `check.sh` now validates a `player` state block (emergent schema use).
 - 2026-06-21 (v1.4): Direction set by [ADR-0001](../decisions/0001-surface-engine-and-direction.md)
   after adversarial review of a web-runtime proposal + research (generative UI, agent-visualization,
   companion market, Anthropic policy) + peer competitive dumps (Replika/Talkie). P3 pivots CLI/TUI →

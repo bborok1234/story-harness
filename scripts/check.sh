@@ -57,6 +57,7 @@ for p in glob.glob("**/states/state.json", recursive=True):
             if not isinstance(v, (int, float)) or not (0 <= v <= 100):
                 errors.append(f"{p}: {where}.{k}={v} out of 0..100")
     check_nums(data.get("world", {}), "world")
+    check_nums(data.get("player", {}), "player")
     for who, vals in data.get("relationships", {}).items():
         if not isinstance(vals, dict):
             errors.append(f"{p}: relationship '{who}' must be an object"); continue
