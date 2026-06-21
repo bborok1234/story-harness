@@ -243,6 +243,17 @@ Refining the built features (P1–P3) is the priority now. Two tracks, core-deep
 - [ ] live real-claude play (user): confirm typed narration + reload restore + deltas in browser
 - [ ] B5 multi-story picker (later in track)
 
+### Platform parity — scene-making + 1:1 character chat (live-validated)
+Toward Zeta / Crack / Character.AI / SillyTavern level.
+- [x] two play modes (`mode: story` GM / `mode: chat` 1:1) + `companion` output-style; play loop mode-aware
+- [x] persona (`persona.md`) + greetings (`## Greeting`/first_mes) + example dialogue (mes_example)
+- [x] scene-making skills: `/new-story` (mode+persona+greeting), `/new-character` (greeting+examples), `/new-scene`
+- [x] `examples/companion-cafe` chat demo (Yuna)
+- [x] **live real-claude validation (both modes):** chat → greeting renders turn 1, 1st-person voice,
+  persona respected, persist-before-narrate; story → 2nd-person GM, importance-tagged log, trust within
+  bands. Two bugs found & fixed live: meta-leak (output discipline) + streaming whitespace (JSON-encoded).
+- [ ] follow-ups: alternate greetings/swipes, regenerate, group-chat turn-taking, ST card import (P5)
+
 ## Risks & Open Questions
 - **Risk:** state drift (agent writes inconsistent values). → Mitigation: enum + legal-transition
   convention (Ink LISTs), clamped scalars, P2 `PostToolUse` audit hook.
