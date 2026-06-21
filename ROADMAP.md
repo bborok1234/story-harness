@@ -7,7 +7,7 @@ in [`docs/plan/2026-06-21-story-harness.md`](docs/plan/2026-06-21-story-harness.
 |---|---|---|
 | **P1 — MVP distribution** | ✅ done | Constitution + `storyteller` output-style & skill, OKF templates, `imperial-ball` demo, `/recap` `/save`, static checks + one scenario eval. |
 | **P2 — Guardrails + authoring** | ✅ done | Per-story hooks (`SessionStart` orient / `Stop` autosave), `/new-story` `/new-character` `/stories` `/lint`, `lore-keeper` sub-agent, `stories/` workspace model. User-verified live. |
-| **P3 — Local web play surface** | ⬜ planned | A minimal **local** web GUI (localhost server drives the user's own Claude Code headless) rendering **only narration + a live state HUD**, hiding tool diffs. Fixes immersion; serves non-technical users. PLAY mode first. |
+| **P3 — Local web play surface** | ⬜ planned | A minimal **local** web GUI (localhost server drives the user's own Claude Code headless) rendering **only narration + a live state HUD**, hiding tool diffs. Stack: Hono bridge + Vite/React/TS + SSE (AG-UI-shaped), per [ADR-0002](docs/decisions/0002-web-stack.md). Fixes immersion; serves non-technical users. PLAY first. |
 | **P4 — Author workspace + dynamic UI** | ⬜ planned | Inspectable/editable state panels (character cards, relationships, timeline, lore) + agent-mutation approval; then generative-UI composition (AG-UI transport + A2UI-shaped manifest + validated component registry). |
 | **P5 — Interop & ecosystem** | ⬜ planned | Import SillyTavern V2/V3 character cards → OKF; world-graph viz; plugin packaging. |
 
