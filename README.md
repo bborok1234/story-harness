@@ -25,6 +25,19 @@ plain files you can read, edit, and version with git.
 
 > For the full game-master voice, set it once via `/config` → **Output style** → **storyteller**.
 
+## Play in the browser (local web surface)
+
+Prefer a clean GUI over the raw CLI? A local web surface renders **only the narration + a live state
+HUD** (no tool diffs), streaming token-by-token, and restores on reload. It drives **your own** Claude
+Code — nothing is hosted.
+
+```bash
+./scripts/play-web.sh                         # imperial-ball (story mode)
+./scripts/play-web.sh examples/companion-cafe # 1:1 character chat (Yuna)
+./scripts/play-web.sh stories/<name>          # your own story
+```
+Open **http://127.0.0.1:5173**, press **▶ 시작 / Begin**, and play. Needs Node.js; see [`web/`](web/README.md).
+
 ## How it works
 
 | Layer | Where |

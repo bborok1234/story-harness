@@ -141,7 +141,7 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 |-------|--------|---------|----------|
 | 1. MVP distribution | ✅ done | 2026-06-21 | user playtest confirmed read→persist→narrate, state/log mutated, Korean prose; `90abecd`+ pushed; CI green |
 | 2. Guardrails + authoring | ✅ done | 2026-06-21 | user-verified live: /new-story, /stories, /new-character, /lint (lore-keeper: hard-clean + 3 soft issues), play read→persist→narrate; workspace model added |
-| 3. Local web play surface | 🔄 in-progress | 2026-06-21 | bridge+React built ([ADR-0002](../decisions/0002-web-stack.md)); typecheck/build + MOCK smoke + security guards green; live real-claude play pending (user) |
+| 3. Local web play surface | ✅ done | 2026-06-21 | connection complete + **live real-claude verified** end-to-end (full stack, multi-turn resume via vite proxy, both modes); `scripts/play-web.sh` launcher; dynamic UI (P4) not required |
 | 4. Author workspace + dynamic UI | ⬜ not started | — | per ADR-0001 |
 | 5. Interop & ecosystem | ⬜ not started | — | — |
 
@@ -202,8 +202,12 @@ artifacts and the state HUD reflects `state.json`.
 - [x] ambient liveness indicator; child env sanitized (deletes `ANTHROPIC_API_KEY`/`ANTHROPIC_AUTH_TOKEN`)
 - [x] security: localhost-only + Origin/Host allowlist (DNS-rebinding guard) — smoke-verified
 - [x] MOCK mode + smoke test (info/state/SSE + forbidden host/origin) green
-- [ ] live real-claude play in browser (user): `cd web && npm install && unset ANTHROPIC_API_KEY && npm run dev`
-- [ ] PLAY mode only (AUTHOR mode is P4)
+- [x] one-command launcher `scripts/play-web.sh <story>` (installs deps, picks STORY, opens 5173)
+- [x] **live real-claude end-to-end (through the browser path, port 5173 → vite proxy → bridge):**
+  full stack boots; SSE streams through the proxy (not buffered); **multi-turn `--resume` continuity**
+  (turn 2 remembers turn 1); state/log persist with importance+bands; transcript restores on reload;
+  both modes (story: imperial-ball · chat: companion-cafe). Connection surface complete.
+- [x] PLAY mode only (AUTHOR mode + dynamic UI is P4 — **not required** for the connection)
 
 ### Phase 4 — Author workspace + dynamic UI
 **Definition of Done:** inspectable/editable state panels + agent-mutation approval; later, dynamic UI

@@ -6,19 +6,21 @@ state HUD** — the tool diffs stay hidden. Engine = your own `claude`/subscript
 
 ## Run
 
+**One command (recommended)** — from the repo root:
 ```bash
-cd web
+./scripts/play-web.sh                      # the imperial-ball demo (story mode)
+./scripts/play-web.sh examples/companion-cafe   # 1:1 character chat (Yuna)
+./scripts/play-web.sh stories/wuxia-idol        # your own story
+```
+Then open **http://127.0.0.1:5173** and press **▶ 시작 / Begin**. It installs deps on first run and
+drives **your own** Claude Code. The bridge deletes `ANTHROPIC_API_KEY` from the child env, so it
+stays on your subscription automatically.
+
+**Or manually** (from `web/`):
+```bash
 npm install
-
-# 1) Try it without Claude (fake narration):
-npm run dev:web            # frontend on http://127.0.0.1:5173
-MOCK=1 npm run dev:bridge  # bridge on 127.0.0.1:8787 (mock)
-
-# 2) Real play — point the bridge at a story folder, BYO your own subscription:
-unset ANTHROPIC_API_KEY    # stay on your subscription (else it bills the API)
-npm run dev                # runs both; bridge defaults to ../examples/imperial-ball
-# or a specific story:
-STORY=../stories/wuxia-idol npm run dev
+STORY=../stories/wuxia-idol npm run dev    # vite (5173) + bridge (8787)
+# no Claude needed, fake narration: in two shells -> `npm run dev:web` and `MOCK=1 npm run dev:bridge`
 ```
 
 Open http://127.0.0.1:5173, press **▶ 시작**, then type actions. State persists in the story's files

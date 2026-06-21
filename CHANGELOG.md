@@ -28,7 +28,12 @@ All notable changes to this project are documented here. Format follows
   `log.md` beats now carry an **importance 1–10** tag; the storyteller reads chapter taglines and opens
   a chapter just-in-time. State discipline: a `bands` frontmatter convention for character status, and
   `check.sh` now validates character `status` numbers (0–100). P4/P5 parked as far-future.
-- **P3 (in progress) — local web play surface** (`web/`, per ADR-0002). A local Hono bridge spawns the
+- **P3 done — Claude Code ↔ web connection surface complete.** Verified live, end-to-end through the
+  real browser path (vite proxy → bridge → the user's own Claude Code): full stack via one command
+  (`scripts/play-web.sh <story>`), SSE streams through the proxy, **multi-turn `--resume` continuity**,
+  state/log persistence (importance + bands), transcript restore on reload, both modes (story + chat).
+  Dynamic UI (P4) is **not required** for the connection and stays parked.
+- **P3 (earlier) — local web play surface** (`web/`, per ADR-0002). A local Hono bridge spawns the
   user's own `claude` headless and streams **narration-only** + a live state HUD over SSE (tool diffs
   hidden); Vite + React + TS frontend; localhost-only with Origin/Host allowlist (DNS-rebinding guard);
   child env sanitized to stay on the subscription; MOCK mode. Typecheck/build + MOCK smoke + security
