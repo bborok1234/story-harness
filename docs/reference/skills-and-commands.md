@@ -20,6 +20,7 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 | `stories` | `/stories` | List your stories and show how to play/create/switch. |
 | `new-character` | `/new-character` | Add an OKF character file to the current story. |
 | `lint` | `/lint` | Continuity check — delegates to the `lore-keeper` sub-agent. |
+| `compact` | `/compact` | Roll old `log.md` beats into a `memory/chapters/` summary (long-story coherence). |
 
 User commands are skills with `disable-model-invocation: true`. Auto skills trigger from their
 `description`. Skills live in `.claude/skills/<name>/SKILL.md`.

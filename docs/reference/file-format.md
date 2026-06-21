@@ -21,7 +21,14 @@ status: { trust_user: 20, affection_user: 10 }
 Crown prince. Reserved, political, proud. Rival of [Duke Aldric](aldric.md).
 ```
 
-Valid `type` values: `Character`, `Location`, `Relationship`, `Event`, `Faction`, `Scene`.
+Valid `type` values: `Character`, `Location`, `Relationship`, `Event`, `Faction`, `Scene`, `Memory`.
+
+**Bands.** A character's `status` numbers map to named bands declared in frontmatter, so the agent moves
+them one legal step at a time (bounds drift):
+```yaml
+status: { trust_user: 20, affection_user: 10 }
+bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [cold, cordial, fond, devoted] }
+```
 
 ## Relationships are links
 
@@ -32,7 +39,9 @@ world graph; no separate graph store is needed. Edge vocabulary (used in `relati
 ## Reserved files
 
 - **`index.md`** (per folder) — what's inside, for navigation / progressive disclosure.
-- **`log.md`** (per story) — append-only, chronological: `- [turn N] <who/what>: <what happened>`.
+- **`log.md`** (per story) — append-only event log: `- [turn N] (imp:1–10) <who/what>: <what happened>`.
+  Each beat is tagged **importance 1–10** so pivotal beats resurface and trivia fades.
+- **`memory/index.md` + `memory/chapters/NN.md`** (`type: Memory`) — compacted older arcs.
 
 ## `states/state.json`
 
@@ -49,8 +58,18 @@ Live numeric state. Numbers are clamped `0–100`; `turn` is a non-negative inte
 ```
 
 Narrative facts (a revealed secret, a status) live in the relevant Markdown file; only *numbers* live
-in `state.json`. Use named bands with one-step legal transitions to bound drift
-(e.g. `wary → neutral → warm → loyal`).
+in `state.json` (the **hot** memory tier — always loaded).
+
+## Memory tiers
+
+Long stories stay coherent by tiering memory instead of reloading everything:
+
+- **hot** — `states/state.json` (small, always read).
+- **recent** — `log.md` (read the tail).
+- **compacted** — `memory/chapters/NN.md`, indexed by `memory/index.md` taglines. The agent reads the
+  taglines always and opens one chapter only when relevant. The `compact` skill rolls old `log.md`
+  beats into chapters (synopsis + durable facts + verbatim importance≥8 beats), keeping the hot/recent
+  tiers small. (Pattern: Karpathy LLM-wiki compaction + MemGPT tiers + Generative-Agents importance.)
 
 ## Validation
 

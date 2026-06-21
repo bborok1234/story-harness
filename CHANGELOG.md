@@ -6,6 +6,12 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Deepening — Track A (memory & continuity).** Memory tiers so long stories stay coherent: a
+  `Memory` file type, `memory/index.md` + `memory/chapters/NN.md`, and a `/compact` skill that rolls
+  old `log.md` beats into chapter summaries (synopsis + durable facts + verbatim importance≥8 beats).
+  `log.md` beats now carry an **importance 1–10** tag; the storyteller reads chapter taglines and opens
+  a chapter just-in-time. State discipline: a `bands` frontmatter convention for character status, and
+  `check.sh` now validates character `status` numbers (0–100). P4/P5 parked as far-future.
 - **P3 (in progress) — local web play surface** (`web/`, per ADR-0002). A local Hono bridge spawns the
   user's own `claude` headless and streams **narration-only** + a live state HUD over SSE (tool diffs
   hidden); Vite + React + TS frontend; localhost-only with Origin/Host allowlist (DNS-rebinding guard);

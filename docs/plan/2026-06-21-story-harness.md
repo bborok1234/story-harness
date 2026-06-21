@@ -223,6 +223,23 @@ graph renders; the harness packages as a plugin.
 - [ ] OKF world-graph visualization
 - [ ] plugin packaging (`.claude-plugin/`)
 
+## Deepening (current focus — P4/P5 parked)
+
+Refining the built features (P1–P3) is the priority now. Two tracks, core-deep.
+
+### Track A — memory & continuity (the moat)
+- [x] state discipline: `bands` frontmatter convention + `check.sh` validates character `status`
+  numbers 0–100; importance 1–10 tag on `log.md` beats
+- [x] memory tiers: `memory/index.md` + `memory/chapters/NN.md` (`type: Memory`); `compact` skill rolls
+  old log beats → chapters; storyteller reads chapter taglines + opens one just-in-time
+- [ ] live (user): play long enough to trigger `/compact`; confirm chapter written + log trimmed
+- [ ] A3 retrieval scoring (recency+importance+entity) · A5 consequences queue (later in track)
+
+### Track B — play experience (web)
+- [ ] B1 token streaming (`--include-partial-messages` → typed-out narration)
+- [ ] B3 reload restore (persist transcript + sessionId; replay feed on load)
+- [ ] B4 state-delta highlights in HUD · B5 multi-story picker
+
 ## Risks & Open Questions
 - **Risk:** state drift (agent writes inconsistent values). → Mitigation: enum + legal-transition
   convention (Ink LISTs), clamped scalars, P2 `PostToolUse` audit hook.

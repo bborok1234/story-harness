@@ -13,7 +13,7 @@ root = os.environ["ROOT"]
 os.chdir(root)
 errors = []
 
-VALID_TYPES = {"Character", "Location", "Relationship", "Event", "Faction", "Scene"}
+VALID_TYPES = {"Character", "Location", "Relationship", "Event", "Faction", "Scene", "Memory"}
 
 def read(p):
     with open(p, encoding="utf-8") as f:
@@ -43,6 +43,15 @@ for p in story_md:
         errors.append(f"{p}: frontmatter missing 'type'")
     elif m.group(1) not in VALID_TYPES:
         errors.append(f"{p}: type '{m.group(1)}' not in {sorted(VALID_TYPES)}")
+
+# 2b. character frontmatter inline `status` numbers in 0..100
+for p in [x for x in story_md if "/characters/" in x]:
+    fm = frontmatter(p) or ""
+    m = re.search(r"status:\s*\{([^}]*)\}", fm)
+    if m:
+        for k, v in re.findall(r"([\w-]+)\s*:\s*(-?\d+)", m.group(1)):
+            if not (0 <= int(v) <= 100):
+                errors.append(f"{p}: status.{k}={v} out of 0..100")
 
 # 3. state.json valid + numbers in 0..100, turn int>=0
 for p in glob.glob("**/states/state.json", recursive=True):

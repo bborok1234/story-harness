@@ -3,6 +3,7 @@ type: Character
 name: Prince Aurelio
 role: Crown Prince
 status: { trust_user: 20, affection_user: 10 }
+bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [cold, cordial, fond, devoted] }
 ---
 # Prince Aurelio
 

@@ -3,6 +3,7 @@ type: Character
 name: Lady Seraphina
 role: Court favorite
 status: { trust_user: 50, affection_user: 30 }
+bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [cold, cordial, fond, devoted] }
 ---
 # Lady Seraphina
 

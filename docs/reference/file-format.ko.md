@@ -22,7 +22,14 @@ status: { trust_user: 20, affection_user: 10 }
 황태자. 과묵하고, 정치적이며, 자존심 강함. [Duke Aldric](aldric.md)의 라이벌.
 ```
 
-유효한 `type` 값: `Character`, `Location`, `Relationship`, `Event`, `Faction`, `Scene`.
+유효한 `type` 값: `Character`, `Location`, `Relationship`, `Event`, `Faction`, `Scene`, `Memory`.
+
+**밴드(bands).** 캐릭터 `status` 숫자를 머리말에 선언한 명명 밴드에 매핑 → 에이전트가 한 번에 한
+단계씩만 이동(드리프트 억제):
+```yaml
+status: { trust_user: 20, affection_user: 10 }
+bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [cold, cordial, fond, devoted] }
+```
 
 ## 관계 = 링크
 
@@ -33,7 +40,9 @@ status: { trust_user: 20, affection_user: 10 }
 ## 예약 파일
 
 - **`index.md`** (폴더마다) — 내부 목록, 탐색 / 점진적 공개용.
-- **`log.md`** (스토리마다) — 추가 전용, 시간순: `- [turn N] <누구/무엇>: <무슨 일>`.
+- **`log.md`** (스토리마다) — 추가 전용 이벤트 로그: `- [turn N] (imp:1–10) <누구/무엇>: <무슨 일>`.
+  비트마다 **중요도 1–10** 태깅 → 핵심은 재부상, 사소한 건 흐려짐.
+- **`memory/index.md` + `memory/chapters/NN.md`** (`type: Memory`) — 압축된 과거 아크.
 
 ## `states/state.json`
 
@@ -49,8 +58,19 @@ status: { trust_user: 20, affection_user: 10 }
 }
 ```
 
-서사적 사실(밝혀진 비밀, 상태)은 해당 마크다운 파일에, *숫자만* `state.json`에 둡니다. 드리프트를
-줄이려면 한 단계씩만 이동하는 명명된 밴드를 쓰세요 (예: `wary → neutral → warm → loyal`).
+서사적 사실(밝혀진 비밀, 상태)은 해당 마크다운 파일에, *숫자만* `state.json`에 둡니다(항상 로드되는
+**hot** 티어).
+
+## 메모리 티어
+
+긴 스토리는 전부 다시 읽는 대신 메모리를 계층화해 일관성을 유지:
+
+- **hot** — `states/state.json` (작게, 항상 읽음).
+- **recent** — `log.md` (끝부분만).
+- **compacted** — `memory/chapters/NN.md`, `memory/index.md` 태그라인으로 색인. 에이전트는 태그라인은
+  항상 읽고, 관련될 때만 챕터 하나를 엶. `compact` 스킬이 오래된 `log.md` 비트를 챕터로(시놉시스 +
+  지속 사실 + 중요도≥8 비트 원문) 굴려 hot/recent를 작게 유지. (Karpathy LLM-위키 compaction +
+  MemGPT 티어 + Generative-Agents 중요도.)
 
 ## 검증
 

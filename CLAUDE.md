@@ -28,12 +28,18 @@ This file is the constitution — short, always-on. Behavior lives in skills; de
 ## Story file format (OKF)
 
 Every story file is **markdown + YAML frontmatter**. One required field: `type`
-(`Character` · `Location` · `Relationship` · `Event` · `Faction` · `Scene`).
+(`Character` · `Location` · `Relationship` · `Event` · `Faction` · `Scene` · `Memory`).
 - **Relationships are markdown links** — `[Prince](../characters/prince.md)`. The links are the graph.
 - Each folder has an **`index.md`** (what's inside, for navigation).
-- The story has one **`log.md`** — append-only, chronological (`- [turn N] who: what happened`).
+- The story has one **`log.md`** — append-only event log (`- [turn N] (imp:1–10) who: what happened`).
+  Tag each beat's **importance 1–10** so pivotal beats resurface and trivia fades.
 - Live numeric state lives in **`states/state.json`** (clamped 0–100); narrative state lives in files.
-- Numeric ranges use named bands with legal transitions, e.g. `trust: wary → neutral → warm → loyal`.
+- **Bands:** a character's `status` numbers map to named bands declared in frontmatter, moved one legal
+  step at a time: `bands: { trust_user: [hostile, wary, neutral, warm, loyal] }`.
+- **Memory tiers** (so long stories stay coherent): hot = `states/state.json` (always read) ·
+  recent = `log.md` (tail) · compacted = `memory/chapters/NN.md` (older arcs), indexed by
+  `memory/index.md` taglines. Read taglines always; open a chapter only when relevant. Compact when
+  `log.md` grows long (see skill `compact`).
 
 ```markdown
 ---

@@ -13,12 +13,15 @@ Persist before you narrate. Read on demand — never load the whole world, only 
 At the **start of a session** (or when you've lost the thread), read, in this order:
 1. `index.md` — what exists in this story.
 2. `SCENE.md` — current location, mood, active characters, available events, current goal.
-3. `states/state.json` — live numeric state + `turn`.
-4. The **tail** of `log.md` — the last several beats (recent history).
-5. The file of **each active character** named in `SCENE.md` (`characters/<name>.md`).
+3. `states/state.json` — live numeric state + `turn` (the **hot** memory tier — always read).
+4. `memory/index.md` — chapter **taglines** of older arcs (cheap). Open a `memory/chapters/NN.md`
+   only when this beat actually touches that past arc (just-in-time).
+5. The **tail** of `log.md` — the last several beats (recent history).
+6. The file of **each active character** named in `SCENE.md` (`characters/<name>.md`).
 
 Each later turn, re-read only what changed or what the player's action touches. Follow links
-(`[Name](path)`) just-in-time when a character/place/fact becomes relevant — don't pre-load.
+(`[Name](path)`) just-in-time when a character/place/fact becomes relevant — don't pre-load. When you
+need a past fact, prefer: state.json → log tail → chapter taglines → open the one relevant chapter.
 
 ## 2. DECIDE — interpret the action
 
@@ -33,7 +36,10 @@ The player's message is their character's action or speech. Work out:
 Before any prose, apply every change to files:
 - **`states/state.json`** — update affected numbers. Clamp to 0–100. Increment `turn`. Respect
   named bands and legal transitions (e.g. `wary → neutral → warm`, one step at a time).
-- **`log.md`** — append one line: `- [turn N] <who/what>: <what happened>`.
+- **`log.md`** — append one line with an **importance 1–10**:
+  `- [turn N] (imp:7) <who/what>: <what happened>`. Rate it: trivia ~1–3, a real shift ~4–7, a pivotal
+  beat (confession, betrayal, death, vow) ~8–10. If `log.md` has grown past ~25 beats, run the
+  `compact` skill first (roll older beats into `memory/chapters/`), then continue.
 - **Character / relationship / event files** — edit if a durable fact changed (a secret revealed, a
   status shifted, an event consumed). **Create** a file if the action introduced new canon
   (a new NPC, place, faction); give it `type` frontmatter and link it from the relevant `index.md`.

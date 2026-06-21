@@ -18,10 +18,12 @@ Add one character file to the story in the current directory.
    name: <Name>
    role: <role>
    status: { trust_user: 0, affection_user: 0 }
+   bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [cold, cordial, fond, devoted] }
    ---
    # <Name>
    Personality. **Goals:** … **Knows:** … **Relationships:** rival of [Other](other.md).
    ```
+   `bands` name the 0–100 ranges; move a status one band-step at a time during play.
    Write relationships as Markdown links to other character files.
 4. **Register state:** add `"<slug>": { "trust": 0, "affection": 0 }` under `relationships` in
    `states/state.json` (only if you track numbers for this character).
