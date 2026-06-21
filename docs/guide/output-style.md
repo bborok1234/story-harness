@@ -2,22 +2,29 @@
 
 **English** | [한국어](output-style.ko.md)
 
-Claude Code ships as a software-engineering assistant. To roleplay, you swap its system-level persona
-for the **Storyteller** output style:
+Claude Code ships as a software-engineering assistant. Roleplay swaps its system-level persona for the
+**Storyteller** output style — second person, present tense, in character, no coding help. It removes
+the built-in coding instructions (`keep-coding-instructions: false`) and installs the GM voice.
 
+## It's already on for stories
+
+The demo and any story scaffolded from `templates/story/` ship a `.claude/settings.json`:
+
+```json
+{ "outputStyle": "storyteller" }
 ```
-/output-style storyteller
-```
 
-This is the single switch that turns the coder into a game master. It:
+So when you run `claude` from a story directory, the game-master voice applies **automatically** — no
+command needed. The skills and the output-style file are found in the project's `.claude/`; the
+per-story `settings.json` only *selects* the style, so normal Claude Code behavior is untouched
+everywhere else (e.g. the repo root stays a plain coding assistant).
 
-- removes the built-in coding instructions (`keep-coding-instructions: false`),
-- installs the GM voice: second person, present tense, scene-paced, characters with their own voices,
-- enforces the contract — *the player owns their character; facts come from files; persist before you
-  narrate.*
+## Setting it manually
 
-You only set it **once per session**; it persists. To go back to normal Claude Code, run
-`/output-style default`.
+If a story has no setting, turn it on for the session: `/config` → **Output style** → **storyteller**.
+Revert with `/config` → **Output style** → **default**.
+
+> The old `/output-style` slash command was removed in Claude Code v2.1.91 — use `/config`.
 
 ## Voice vs. procedure
 

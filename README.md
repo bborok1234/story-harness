@@ -23,7 +23,7 @@ The Storyteller reads the scene, applies your action to the story files, then na
 or `/save`. Your relationships and the world's state persist in `states/state.json` and `log.md` —
 plain files you can read, edit, and version with git.
 
-> For the full game-master voice, set the output style once: `/output-style storyteller`.
+> For the full game-master voice, set it once via `/config` → **Output style** → **storyteller**.
 
 ## How it works
 

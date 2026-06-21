@@ -7,7 +7,7 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 ## Output style
 
 - **`storyteller`** (`.claude/output-styles/storyteller.md`) — the game-master persona. Set with
-  `/output-style storyteller`. See [guide/output-style](../guide/output-style.md).
+  `/config` → **Output style** → **storyteller**. See [guide/output-style](../guide/output-style.md).
 
 ## Skills
 

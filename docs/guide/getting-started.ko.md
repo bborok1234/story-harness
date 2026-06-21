@@ -17,11 +17,8 @@ cd story-harness/examples/imperial-ball
 claude
 ```
 
-세션에서 게임마스터 보이스를 한 번 설정:
-
-```
-/output-style storyteller
-```
+세션에서 게임마스터 보이스를 한 번 설정 — `/config` 열고 **Output style** 선택 후 **storyteller**
+고르기. (옛 `/output-style` 명령은 Claude Code v2.1.91에서 제거됨.)
 
 그 다음 **인캐릭터로** — 캐릭터가 하는 행동을 산문으로 적습니다:
 

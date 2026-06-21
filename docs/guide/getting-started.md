@@ -15,11 +15,8 @@ cd story-harness/examples/imperial-ball
 claude
 ```
 
-In the session, set the game-master voice once:
-
-```
-/output-style storyteller
-```
+In the session, set the game-master voice once — open `/config`, choose **Output style**, pick
+**storyteller**. (The old `/output-style` command was removed in Claude Code v2.1.91.)
 
 Then act **in character** — describe what your character does, in plain prose:
 
