@@ -107,14 +107,14 @@ app.post("/api/play", async (c) => {
           if (d?.type === "content_block_delta" && d.delta?.type === "text_delta" && d.delta.text) {
             sawDelta = true;
             gm += d.delta.text;
-            await stream.writeSSE({ event: "narration", data: d.delta.text });
+            await stream.writeSSE({ event: "narration", data: JSON.stringify(d.delta.text) });
           }
         } else if (ev.type === "assistant" && !sawDelta) {
           // fallback: no partial deltas this turn -> emit whole text blocks
           for (const block of ev.message?.content ?? []) {
             if (block?.type === "text" && block.text) {
               gm += block.text;
-              await stream.writeSSE({ event: "narration", data: block.text });
+              await stream.writeSSE({ event: "narration", data: JSON.stringify(block.text) });
             }
           }
         } else if (ev.type === "result") {

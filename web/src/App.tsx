@@ -34,9 +34,11 @@ export function App() {
     try {
       for await (const ev of postSSE("/api/play", { input: t, sessionId: sessionId.current })) {
         if (ev.event === "narration") {
+          let chunk = ev.data;
+          try { chunk = JSON.parse(ev.data); } catch { /* tolerate plain text */ }
           setFeed((f) => {
             const c = [...f];
-            c[c.length - 1] = { role: "gm", text: c[c.length - 1].text + ev.data };
+            c[c.length - 1] = { role: "gm", text: c[c.length - 1].text + chunk };
             return c;
           });
         } else if (ev.event === "delta") {
