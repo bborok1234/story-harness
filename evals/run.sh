@@ -27,6 +27,8 @@ fi
 command -v claude >/dev/null 2>&1 || { echo "eval: 'claude' not on PATH — run live later" >&2; exit 3; }
 
 echo "running scenario '$NAME' …"
+# Note: if ANTHROPIC_API_KEY is set, `claude -p` silently uses it (per-token API billing) instead of
+# your subscription. Run `unset ANTHROPIC_API_KEY` first to stay on your subscription (see ADR-0001).
 # acceptEdits auto-approves file edits but keeps other gates (no full bypass).
 # Set EVAL_BYPASS=1 to use bypassPermissions instead (only if you trust the scenario).
 PERM="acceptEdits"; [ "${EVAL_BYPASS:-0}" = "1" ] && PERM="bypassPermissions"

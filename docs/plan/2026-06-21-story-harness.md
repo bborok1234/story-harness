@@ -5,7 +5,7 @@ status: in-progress       # draft | approved | in-progress | on-hold | done | ab
 created: 2026-06-21
 updated: 2026-06-21
 owner: limmir88@gmail.com
-version: 1.3
+version: 1.4
 tags: [harness, roleplay, claude-code, mvp]
 related: [https://github.com/bborok1234/story-harness]  # repo
 supersedes: null
@@ -141,8 +141,9 @@ tested by scripts; **stochastic behavior** (in-character prose) → asserted via
 |-------|--------|---------|----------|
 | 1. MVP distribution | ✅ done | 2026-06-21 | user playtest confirmed read→persist→narrate, state/log mutated, Korean prose; `90abecd`+ pushed; CI green |
 | 2. Guardrails + authoring | 🔄 in-progress | 2026-06-21 | hooks (SessionStart/Stop) verified firing; new-story/new-character/lint skills + lore-keeper agent built; live scaffold/lint verification pending (user) |
-| 3. CLI wrapper + plugin packaging | ⬜ not started | — | — |
-| 4. Interop (card import, graph viz) | ⬜ not started | — | — |
+| 3. Local web play surface | ⬜ not started | — | direction set by [ADR-0001](../decisions/0001-surface-engine-and-direction.md) (was "CLI wrapper") |
+| 4. Author workspace + dynamic UI | ⬜ not started | — | per ADR-0001 |
+| 5. Interop & ecosystem | ⬜ not started | — | — |
 
 Legend: ⬜ not started · 🔄 in-progress · ✅ done · ⛔ blocked · ⏭ skipped
 
@@ -178,21 +179,41 @@ template diff · continuity-lint flags a seeded contradiction (L2) · skill-trig
 - [x] continuity-lint: `/lint` skill delegating to `lore-keeper`
 - [ ] live verification (user): `/new-story` scaffolds; `/lint` catches a seeded contradiction
 
-### Phase 3 — CLI wrapper + plugin packaging
-**Definition of Done:** a `story` command drives `claude` headless for a clean play UX; the harness
-installs as a Claude Code plugin so any story dir anywhere works.
-**Verified by:** `story` CLI smoke test (spawns claude → returns → save created) · plugin install then
-play from a fresh `/tmp` dir succeeds.
-- [ ] plugin manifest (`.claude-plugin/`) packaging skills/agents/hooks/output-style
-- [ ] `story` thin CLI (drives `claude -p --output-format stream-json`, manages saves)
-- [ ] install + play from an arbitrary directory
+> **Direction revised by [ADR-0001](../decisions/0001-surface-engine-and-direction.md).** P3 pivots
+> from a CLI/TUI wrapper to a **local web** play surface; P4 becomes the author workspace + dynamic UI;
+> interop moves to P5. The moat is files-as-truth + agentic read/write/approve, not the UI. Engine
+> stays local on the user's own subscription/key (verified in-ToS, June 2026; mind the
+> `ANTHROPIC_API_KEY` precedence footgun — `unset` to stay on subscription).
 
-### Phase 4 — Interop (optional)
+### Phase 3 — Local web play surface
+**Definition of Done:** a local web GUI (localhost server driving the user's own `claude` headless)
+plays a scene rendering **only narration + a live state HUD** — no tool diffs leak. Engine = user's
+own subscription/key; no hosting.
+**Verified by:** play a turn in the browser; assert the rendered transcript contains no tool-call/diff
+artifacts and the state HUD reflects `state.json`.
+- [ ] localhost server that drives `claude -p --output-format stream-json` and filters the event
+  stream to assistant-narration only (hide tool_use/tool_result/thinking)
+- [ ] single-page UI: narration view + input + small state HUD (relationships/turn from `state.json`)
+- [ ] one ambient liveness indicator; `unset ANTHROPIC_API_KEY` guard
+- [ ] PLAY mode only (AUTHOR mode is P4)
+
+### Phase 4 — Author workspace + dynamic UI
+**Definition of Done:** inspectable/editable state panels + agent-mutation approval; later, dynamic UI
+composition from a validated manifest.
+**Verified by:** edit a character card in the UI → file changes on disk; approve/reject an agent state
+change; (later) a malformed manifest is rejected before render.
+- [ ] AUTHOR mode panels: character cards, relationships, timeline, lore (read + edit → files)
+- [ ] agent-mutation approval (diff-style) for state changes
+- [ ] generative UI: AG-UI transport + A2UI-shaped manifest + component registry + manifest validation + eval
+- [ ] agent-visualization demoted: liveness + editable-state + opt-in inspect panel only (no actors/office)
+
+### Phase 5 — Interop & ecosystem (optional)
 **Definition of Done:** a SillyTavern V2/V3 character card imports to an OKF character file; the world
-graph renders.
+graph renders; the harness packages as a plugin.
 **Verified by:** import a known V2 card fixture → assert OKF fields · graph viz produces valid HTML.
 - [ ] SillyTavern V2/V3 card import → OKF character file
-- [ ] OKF HTML graph visualization of the world
+- [ ] OKF world-graph visualization
+- [ ] plugin packaging (`.claude-plugin/`)
 
 ## Risks & Open Questions
 - **Risk:** state drift (agent writes inconsistent values). → Mitigation: enum + legal-transition
@@ -204,6 +225,12 @@ graph renders.
   resolve during P1 build (persona → output-style, procedure → skill).
 
 ## Changelog
+- 2026-06-21 (v1.4): Direction set by [ADR-0001](../decisions/0001-surface-engine-and-direction.md)
+  after adversarial review of a web-runtime proposal + research (generative UI, agent-visualization,
+  companion market, Anthropic policy) + peer competitive dumps (Replika/Talkie). P3 pivots CLI/TUI →
+  **local web** play surface; P4 = author workspace + dynamic UI (generative UI deferred to here);
+  interop → P5. Moat = files-as-truth (not UI); engine stays local on the user's own subscription/key
+  (verified in-ToS June 2026). Agent-as-character visualization demoted.
 - 2026-06-21 (v1.3): Published to GitHub (`bborok1234/story-harness`, public, MIT). OSS setup
   (LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, CHANGELOG, issue/PR templates) + CI workflow
   running `scripts/check.sh` — first run green. First commit `90abecd`.
