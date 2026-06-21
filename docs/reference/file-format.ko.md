@@ -37,6 +37,17 @@ bands: { trust_user: [hostile, wary, neutral, warm, loyal], affection_user: [col
 그래프입니다. 별도 그래프 저장소 불필요. 엣지 어휘(`relationships/`에서 사용):
 `knows · likes · loves · rivals · fears · serves · betrayed`.
 
+## 모드, 페르소나 & 인사말 (씬 메이킹 + 챗)
+
+- **모드.** `SCENE.md` 머리말에 `mode: story`(GM 서술, 2인칭 — `storyteller` 출력 스타일) 또는
+  `mode: chat`(1:1 캐릭터챗, 캐릭터가 1인칭 응답 — `companion`, Character.AI/제타/크랙식) 설정.
+  스토리의 `.claude/settings.json`이 맞는 `outputStyle`을 선택.
+- **페르소나.** `persona.md`(`type: Character`, `role: player`)는 **플레이어 자신의** 캐릭터. 에이전트가
+  누구에게 말하는지 알기 위해 읽으며, 플레이어를 대신 말/행동하지 않음. `SCENE.md`가
+  `**You:** [이름](persona.md)`로 링크.
+- **인사말 + 예시 대화.** 캐릭터 파일은 `## Greeting`(첫 메시지, 씬 입장 시 사용)과
+  `## Example dialogue`(보이스 앵커 1~3교환)를 가질 수 있음 — SillyTavern `first_mes` / `mes_example` 등가물.
+
 ## 예약 파일
 
 - **`index.md`** (폴더마다) — 내부 목록, 탐색 / 점진적 공개용.

@@ -6,6 +6,17 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Platform parity — scene-making + 1:1 character chat** (toward Zeta/Crack/Character.AI/SillyTavern):
+  - **Two play modes:** `SCENE.md` `mode: story` (GM, 2nd person) or `mode: chat` (1:1, character
+    replies 1st person). New **`companion`** output-style for chat; the play loop is mode-aware.
+  - **Persona:** `persona.md` (the player's own character) — the agent addresses it and never speaks
+    for the player.
+  - **Greetings + example dialogue:** character files carry `## Greeting` (first message) and
+    `## Example dialogue` (voice anchor) — `first_mes`/`mes_example` equivalents.
+  - **Scene-making:** `/new-scene` (fresh situation reusing characters); `/new-story` now asks mode +
+    persona + sets the matching `outputStyle`; `/new-character` captures greeting + example dialogue.
+  - **`examples/companion-cafe`** chat-mode demo (Yuna). `check.sh` validates `mode`. Pipeline verified
+    via MOCK; real 1:1 play is a `claude` run.
 - **Deepening — Track B (play experience, web).** Narration now **streams token-by-token**
   (`--include-partial-messages`). The browser **restores on reload**: the bridge persists each turn to
   `.session/transcript.jsonl` + the session `id`, and `/api/transcript` replays the feed and resumes

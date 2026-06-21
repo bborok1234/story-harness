@@ -36,6 +36,10 @@ Every story file is **markdown + YAML frontmatter**. One required field: `type`
 - Live numeric state lives in **`states/state.json`** (clamped 0–100); narrative state lives in files.
 - **Bands:** a character's `status` numbers map to named bands declared in frontmatter, moved one legal
   step at a time: `bands: { trust_user: [hostile, wary, neutral, warm, loyal] }`.
+- **Play modes & persona:** `SCENE.md` sets `mode: story` (GM, 2nd person) or `mode: chat` (1:1, the
+  character replies 1st person, like Character.AI/제타/크랙). `persona.md` is the player's own character.
+  Characters may carry a **Greeting** (opening) and **Example dialogue** (voice). Mode picks the
+  output-style: `storyteller` (story) or `companion` (chat).
 - **Memory tiers** (so long stories stay coherent): hot = `states/state.json` (always read) ·
   recent = `log.md` (tail) · compacted = `memory/chapters/NN.md` (older arcs), indexed by
   `memory/index.md` taglines. Read taglines always; open a chapter only when relevant. Compact when

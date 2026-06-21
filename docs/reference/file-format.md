@@ -36,6 +36,19 @@ Reference another file with a Markdown link — `[Duke Aldric](aldric.md)`. The 
 world graph; no separate graph store is needed. Edge vocabulary (used in `relationships/`):
 `knows · likes · loves · rivals · fears · serves · betrayed`.
 
+## Modes, persona & greetings (scene-making + chat)
+
+- **Mode.** `SCENE.md` frontmatter sets `mode: story` (GM narration, 2nd person — pairs with the
+  `storyteller` output-style) or `mode: chat` (1:1 character chat, the character replies 1st person —
+  pairs with `companion`, like Character.AI / 제타 / 크랙). The story's `.claude/settings.json` selects
+  the matching `outputStyle`.
+- **Persona.** `persona.md` (`type: Character`, `role: player`) is the **player's own** character. The
+  agent reads it to know who it's addressing and never speaks or acts for the player. `SCENE.md` links
+  it as `**You:** [name](persona.md)`.
+- **Greeting + example dialogue.** A character file may carry a `## Greeting` (its opening line / first
+  message, used when it enters a scene) and `## Example dialogue` (1–3 exchanges anchoring its voice) —
+  the SillyTavern `first_mes` / `mes_example` equivalents.
+
 ## Reserved files
 
 - **`index.md`** (per folder) — what's inside, for navigation / progressive disclosure.

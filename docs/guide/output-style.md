@@ -26,6 +26,18 @@ Revert with `/config` → **Output style** → **default**.
 
 > The old `/output-style` slash command was removed in Claude Code v2.1.91 — use `/config`.
 
+## Two voices: story vs chat
+
+There are two play voices, picked by the scene's `mode` (the story's `.claude/settings.json` sets the
+matching `outputStyle`):
+
+- **`storyteller`** — `mode: story`. Game-master narration in second person; the agent runs the world.
+- **`companion`** — `mode: chat`. 1:1 character chat: the agent **becomes** the active character and
+  replies in first person to your `persona.md`, never narrating your actions — like Character.AI / 제타 /
+  크랙 / SillyTavern character chat. (See the `examples/companion-cafe` demo.)
+
+Switch manually the same way: `/config` → **Output style** → `storyteller` or `companion`.
+
 ## Voice vs. procedure
 
 - The **output style** (`.claude/output-styles/storyteller.md`) = *who you are and how you sound.*

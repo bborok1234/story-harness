@@ -53,6 +53,13 @@ for p in [x for x in story_md if "/characters/" in x]:
             if not (0 <= int(v) <= 100):
                 errors.append(f"{p}: status.{k}={v} out of 0..100")
 
+# 2c. scene `mode` must be story|chat if present
+for p in story_md:
+    fm = frontmatter(p) or ""
+    m = re.search(r"^mode:\s*(\w+)", fm, re.M)
+    if m and m.group(1) not in {"story", "chat"}:
+        errors.append(f"{p}: mode '{m.group(1)}' not in [story, chat]")
+
 # 3. state.json valid + numbers in 0..100, turn int>=0
 for p in glob.glob("**/states/state.json", recursive=True):
     try:

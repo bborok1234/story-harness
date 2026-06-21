@@ -22,16 +22,21 @@ it. Stories are kept separate from the bundled demo (`examples/`) — never scaf
 2. **Name** from `$ARGUMENTS`; slugify (lowercase, spaces→hyphens, ASCII). If empty, ask.
 3. **Scaffold:** `mkdir -p "$STORY_HOME" && cp -R "$ROOT/templates/story" "$STORY_HOME/<slug>"`.
    If `$STORY_HOME/<slug>` already exists, stop and ask (don't overwrite).
-4. **Interview** the player with `AskUserQuestion` (2–4 questions) unless already specified: genre/tone,
-   setting, who the player's character is, opening situation, 1–2 key NPCs.
+4. **Interview** the player with `AskUserQuestion` (2–4 questions) unless already specified: **mode**
+   (story = GM narration · chat = 1:1 character chat), genre/tone, setting, **who the player is
+   (persona)**, opening situation, 1–2 key characters.
 5. **Fill the scaffold** (replace every `<placeholder>`): `index.md` (title + premise), `SCENE.md`
-   (opening location/mood/active characters/goal/events), one `characters/<name>.md` per NPC (linked
-   from `characters/index.md`), `states/state.json` (real characters, `turn: 0`), `log.md` opening line.
+   (set `mode:`, opening location/mood, active characters, goal, events, the `You: persona` link),
+   `persona.md` (who the player is), one `characters/<name>.md` per character — **with a Greeting and
+   Example dialogue** so voice + opening are anchored — linked from `characters/index.md`,
+   `states/state.json` (real characters, `turn: 0`), `log.md` opening line.
    The copied template files already exist, so **Read each one before you Edit it** (Claude Code
    requires a Read before editing an existing file), or replace it wholesale with `Write`. Brand-new
-   NPC/world files don't need a prior Read.
-6. **Verify:** run `"$ROOT/scripts/check.sh"` if present.
-7. **Print the play command, exactly:**
+   files don't need a prior Read.
+6. **Set the voice for the mode:** edit `<slug>/.claude/settings.json` → `"outputStyle"` to
+   **`companion`** for chat mode, or leave **`storyteller`** for story mode.
+7. **Verify:** run `"$ROOT/scripts/check.sh"` if present.
+8. **Print the play command, exactly:**
    > Created `stories/<slug>/`. To play: `cd "$STORY_HOME/<slug>" && claude`
-   Remind them the game-master voice + autosave apply automatically there. Don't start narrating — this
-   is authoring.
+   Remind them the chosen voice (storyteller/companion) + autosave apply automatically there. Don't
+   start narrating — this is authoring.

@@ -8,6 +8,18 @@ description: Runs a turn of an interactive, file-backed roleplay/story. Use when
 You play one turn at a time with this loop: **CONTEXT → DECIDE → PERSIST → NARRATE**.
 Persist before you narrate. Read on demand — never load the whole world, only what this beat needs.
 
+## Mode (how you speak)
+`SCENE.md` frontmatter sets `mode: story` (default) or `mode: chat`:
+- **story** — you are the game master: second person, present tense, narrate the world (pairs with the
+  `storyteller` output-style).
+- **chat** — you ARE the active character (1:1, like Character.AI / 제타 / 크랙): first person, reply to
+  the player's `persona.md`, never narrate the player's own actions/feelings (pairs with the
+  `companion` output-style).
+
+On the **first turn of a scene** (empty/near-empty `log.md`), if the scene or active character has an
+authored `greeting` (a.k.a. `first_mes`), open with it (verbatim or lightly adapted) rather than a cold
+open. If `alternate_greetings` exist, you may pick one.
+
 ## 1. CONTEXT — orient (read, don't guess)
 
 At the **start of a session** (or when you've lost the thread), read, in this order:
@@ -55,12 +67,16 @@ Before any prose, apply every change to files:
 | learns / reveals a secret | the holder's character file | edit that file (knowledge); `log.md` |
 | introduces a new person/place | — | create the file + link from `index.md`; `log.md` |
 
-## 4. NARRATE — now write the prose
+## 4. NARRATE / REPLY — now write it
 
-Only after persisting, narrate per the `storyteller` output-style voice: second person, present
-tense, scene-paced, other characters in their own voices. Reflect the change you just saved (if trust
-fell, the prose should feel it). End at a point that invites the player's next action — don't decide
-it for them.
+Only after persisting, respond **per the scene's mode**:
+- **story:** narrate (second person, present tense, scene-paced; other characters in their own voices).
+- **chat:** reply *as the active character* (first person; dialogue + brief action; address the
+  player's persona). Don't describe the player's own choices or feelings.
+
+Either way: read the player's `persona.md` if present, reflect the change you just saved (if trust
+fell, it should be felt), and end at a point that invites the player's next move — never decide it for
+them.
 
 ## Guardrails
 - Never narrate a change you didn't persist. Never persist a change the prose won't reflect.

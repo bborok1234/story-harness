@@ -6,8 +6,10 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 
 ## Output style
 
-- **`storyteller`** (`.claude/output-styles/storyteller.md`) — the game-master persona. Set with
-  `/config` → **Output style** → **storyteller**. See [guide/output-style](../guide/output-style.md).
+- **`storyteller`** (`.claude/output-styles/storyteller.md`) — game-master persona (story mode, 2nd person).
+- **`companion`** (`.claude/output-styles/companion.md`) — 1:1 character chat (chat mode, the character
+  replies in 1st person to your persona). Picked by the scene's `mode` via the story's settings; or set
+  manually `/config` → **Output style**. See [guide/output-style](../guide/output-style.md).
 
 ## Skills
 
@@ -18,7 +20,8 @@ Story Harness is built from Claude Code primitives. Here's what each does and wh
 | `save` | `/save` | Snapshots the story to `saves/<timestamp>/`. |
 | `new-story` | `/new-story` | Scaffold a new story into `stories/<name>/` + print how to play it. |
 | `stories` | `/stories` | List your stories and show how to play/create/switch. |
-| `new-character` | `/new-character` | Add an OKF character file to the current story. |
+| `new-character` | `/new-character` | Add an OKF character (with greeting + example dialogue) to the story. |
+| `new-scene` | `/new-scene` | Start a fresh situation in the current story, reusing characters. |
 | `lint` | `/lint` | Continuity check — delegates to the `lore-keeper` sub-agent. |
 | `compact` | `/compact` | Roll old `log.md` beats into a `memory/chapters/` summary (long-story coherence). |
 

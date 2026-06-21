@@ -1,5 +1,6 @@
 ---
 type: Scene
+mode: story
 location: Imperial Ballroom
 mood: Formal
 ---

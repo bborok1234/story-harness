@@ -10,7 +10,8 @@ Add one character file to the story in the current directory.
 
 1. **Name** from the command arguments (`$ARGUMENTS`); slugify for the filename (ASCII).
 2. **Gather essentials** (ask briefly with `AskUserQuestion` if not given): role, personality in a
-   line or two, a goal, a secret or tension, and who they relate to.
+   line or two, a goal, a secret or tension, who they relate to, a **greeting** (their opening line /
+   first message), and a snippet of **example dialogue** (so their voice is anchored).
 3. **Create `characters/<slug>.md`:**
    ```markdown
    ---
@@ -22,8 +23,19 @@ Add one character file to the story in the current directory.
    ---
    # <Name>
    Personality. **Goals:** … **Knows:** … **Relationships:** rival of [Other](other.md).
+
+   ## Voice
+   How they sound in one line (register, tics).
+
+   ## Greeting
+   Their opening line / first message — used when they enter a scene.
+
+   ## Example dialogue
+   - User: …
+   - <Name>: "…"   (1–3 exchanges that capture the voice)
    ```
-   `bands` name the 0–100 ranges; move a status one band-step at a time during play.
+   `bands` name the 0–100 ranges; move a status one band-step at a time during play. The **Greeting**
+   and **Example dialogue** sections are what the play loop uses for the opening and for voice.
    Write relationships as Markdown links to other character files.
 4. **Register state:** add `"<slug>": { "trust": 0, "affection": 0 }` under `relationships` in
    `states/state.json` (only if you track numbers for this character).
