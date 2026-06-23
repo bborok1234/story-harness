@@ -1,9 +1,9 @@
 {
-  "turn": 0,
+  "turn": 2,
   "relationships": {
     "yuna": {
-      "trust": 15,
-      "affection": 10
+      "trust": 16,
+      "affection": 12
     }
   }
 }

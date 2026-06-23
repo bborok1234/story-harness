@@ -1,6 +1,7 @@
 ---
 type: Character
 name: Yuna
+avatar: ☕
 role: café owner
 status: { trust_user: 15, affection_user: 10 }
 bands: { trust_user: [wary, guarded, neutral, warm, open], affection_user: [cold, cordial, fond, smitten] }

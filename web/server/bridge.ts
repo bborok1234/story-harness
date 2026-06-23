@@ -1,16 +1,14 @@
 // Story Harness — local bridge.
 // Spawns the user's OWN `claude` headless in a story folder, streams stream-json,
-// and re-emits ONLY the narration (token-streamed) + state to the browser over SSE.
-// Persists a transcript so the browser can restore on reload. Localhost only.
+// re-emits ONLY narration (token-streamed) + state over SSE, persists a transcript,
+// and supports regenerate (re-roll the last turn). Localhost only.
 //
-// Usage:
-//   tsx server/bridge.ts [storyDir] [--serve-static] [--mock]
-//   storyDir defaults to ../examples/imperial-ball (relative to web/).
-//   MOCK=1 (or --mock) streams fake narration so you can test without Claude.
+// Usage: tsx server/bridge.ts [storyDir] [--serve-static] [--mock]
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { streamSSE } from "hono/streaming";
+import type { SSEStreamingApi } from "hono/streaming";
 import { spawn } from "node:child_process";
 import readline from "node:readline";
 import { readFile, writeFile, mkdir, appendFile } from "node:fs/promises";
@@ -32,10 +30,10 @@ const ALLOW_ORIGINS = new Set([
 ]);
 
 type Beat = { role: "player" | "gm"; text: string };
+type Snapshot = { input: string; sid?: string; stateText: string; logText: string; tlen: number };
 
 const app = new Hono();
 
-// Security: localhost only + Origin/Host allowlist (kills DNS rebinding).
 app.use("/api/*", async (c, next) => {
   const host = (c.req.header("host") ?? "").split(":")[0];
   if (!ALLOW_HOSTS.has(host)) return c.text("forbidden host", 403);
@@ -44,16 +42,17 @@ app.use("/api/*", async (c, next) => {
   return next();
 });
 
-async function readJSON(p: string): Promise<any> {
-  try { return JSON.parse(await readFile(p, "utf8")); } catch { return {}; }
-}
-const readState = () => readJSON(path.join(STORY, "states", "state.json"));
+const STATE_PATH = path.join(STORY, "states", "state.json");
+const LOG_PATH = path.join(STORY, "log.md");
+const TRANSCRIPT_PATH = path.join(SESSION_DIR, "transcript.jsonl");
+
+async function readText(p: string): Promise<string> { try { return await readFile(p, "utf8"); } catch { return ""; } }
+async function readJSON(p: string): Promise<any> { try { return JSON.parse(await readFile(p, "utf8")); } catch { return {}; } }
+const readState = () => readJSON(STATE_PATH);
 
 function flatten(s: any): Record<string, number> {
   const out: Record<string, number> = {};
-  const take = (o: any, pre: string) => {
-    for (const [k, v] of Object.entries(o ?? {})) if (typeof v === "number") out[`${pre}${k}`] = v;
-  };
+  const take = (o: any, pre: string) => { for (const [k, v] of Object.entries(o ?? {})) if (typeof v === "number") out[`${pre}${k}`] = v; };
   take(s.world, "world."); take(s.player, "player.");
   for (const [who, vals] of Object.entries(s.relationships ?? {})) take(vals, `${who}.`);
   return out;
@@ -64,106 +63,114 @@ function diff(before: any, after: any): Record<string, number> {
   return d;
 }
 
+// Scene mode + first active character (name/avatar) for chat-mode UI.
+async function sceneMeta(): Promise<{ mode: string; character: { name: string; avatar?: string } | null }> {
+  const scene = await readText(path.join(STORY, "SCENE.md"));
+  const mode = (scene.match(/^mode:\s*(\w+)/m)?.[1] ?? "story").toLowerCase();
+  const link = scene.match(/Active characters[\s\S]*?\]\((characters\/[^)]+\.md)\)/)?.[1];
+  let character: { name: string; avatar?: string } | null = null;
+  if (link) {
+    const cf = await readText(path.join(STORY, link));
+    const fm = cf.startsWith("---") ? (cf.split("---", 3)[1] ?? "") : "";
+    const name = fm.match(/^name:\s*(.+)$/m)?.[1]?.trim();
+    const avatar = fm.match(/^avatar:\s*(.+)$/m)?.[1]?.trim();
+    if (name) character = { name, avatar };
+  }
+  return { mode, character };
+}
+
 async function loadTranscript(): Promise<{ beats: Beat[]; sessionId?: string }> {
   let beats: Beat[] = [];
   let sessionId: string | undefined;
-  try {
-    const raw = await readFile(path.join(SESSION_DIR, "transcript.jsonl"), "utf8");
-    beats = raw.split("\n").filter(Boolean).map((l) => JSON.parse(l));
-  } catch { /* none yet */ }
+  try { beats = (await readFile(TRANSCRIPT_PATH, "utf8")).split("\n").filter(Boolean).map((l) => JSON.parse(l)); } catch { /* none */ }
   try { sessionId = (await readFile(path.join(SESSION_DIR, "id"), "utf8")).trim() || undefined; } catch { /* none */ }
   return { beats, sessionId };
 }
 async function persistTurn(player: string, gm: string, sessionId?: string) {
   await mkdir(SESSION_DIR, { recursive: true });
   const line = (b: Beat) => JSON.stringify(b) + "\n";
-  await appendFile(path.join(SESSION_DIR, "transcript.jsonl"), line({ role: "player", text: player }) + line({ role: "gm", text: gm }));
+  await appendFile(TRANSCRIPT_PATH, line({ role: "player", text: player }) + line({ role: "gm", text: gm }));
   if (sessionId) await writeFile(path.join(SESSION_DIR, "id"), sessionId);
 }
 
-app.get("/api/info", (c) => c.json({ story: path.basename(STORY), storyDir: STORY, mock: MOCK }));
+let undo: Snapshot | null = null;
+async function snapshot(input: string, sid?: string): Promise<Snapshot> {
+  const tlen = (await readText(TRANSCRIPT_PATH)).split("\n").filter(Boolean).length;
+  return { input, sid, stateText: await readText(STATE_PATH), logText: await readText(LOG_PATH), tlen };
+}
+async function restore(s: Snapshot) {
+  if (s.stateText) await writeFile(STATE_PATH, s.stateText);
+  if (s.logText) await writeFile(LOG_PATH, s.logText);
+  await mkdir(SESSION_DIR, { recursive: true });
+  const keep = (await readText(TRANSCRIPT_PATH)).split("\n").filter(Boolean).slice(0, s.tlen);
+  await writeFile(TRANSCRIPT_PATH, keep.length ? keep.join("\n") + "\n" : "");
+  if (s.sid) await writeFile(path.join(SESSION_DIR, "id"), s.sid);
+}
+
+async function runTurn(stream: SSEStreamingApi, input: string, sessionId?: string) {
+  await stream.writeSSE({ event: "status", data: "composing" });
+  const before = await readState();
+  let sid = sessionId, gm = "", sawDelta = false;
+  for await (const ev of MOCK ? mockTurn(input) : runClaude(input, sessionId)) {
+    if (ev.type === "system" && ev.subtype === "init" && ev.session_id) sid = ev.session_id;
+    else if (ev.type === "stream_event") {
+      const d = ev.event;
+      if (d?.type === "content_block_delta" && d.delta?.type === "text_delta" && d.delta.text) {
+        sawDelta = true; gm += d.delta.text;
+        await stream.writeSSE({ event: "narration", data: JSON.stringify(d.delta.text) });
+      }
+    } else if (ev.type === "assistant" && !sawDelta) {
+      for (const block of ev.message?.content ?? []) if (block?.type === "text" && block.text) {
+        gm += block.text; await stream.writeSSE({ event: "narration", data: JSON.stringify(block.text) });
+      }
+    } else if (ev.type === "result") { if (ev.session_id) sid = ev.session_id; break; }
+  }
+  const after = await readState();
+  const d = diff(before, after);
+  if (Object.keys(d).length) await stream.writeSSE({ event: "delta", data: JSON.stringify(d) });
+  await stream.writeSSE({ event: "state", data: JSON.stringify(after) });
+  await persistTurn(input, gm, sid);
+  await stream.writeSSE({ event: "done", data: JSON.stringify({ sessionId: sid }) });
+}
+
+app.get("/api/info", async (c) => c.json({ story: path.basename(STORY), storyDir: STORY, mock: MOCK, ...(await sceneMeta()) }));
 app.get("/api/state", async (c) => c.json(await readState()));
 app.get("/api/transcript", async (c) => c.json(await loadTranscript()));
 
-// One turn: POST { input, sessionId? } -> SSE { status | narration | delta | state | done | error }.
 app.post("/api/play", async (c) => {
   const body = await c.req.json().catch(() => ({}));
-  const input: string = (body.input ?? "").toString();
-  const sessionId: string | undefined = body.sessionId;
+  const input = (body.input ?? "").toString();
   if (!input.trim()) return c.text("empty input", 400);
-
-  return streamSSE(c, async (stream) => {
-    await stream.writeSSE({ event: "status", data: "composing" });
-    const before = await readState();
-    let sid = sessionId;
-    let gm = "";
-    let sawDelta = false;
-    try {
-      for await (const ev of MOCK ? mockTurn(input) : runClaude(input, sessionId)) {
-        if (ev.type === "system" && ev.subtype === "init" && ev.session_id) {
-          sid = ev.session_id;
-        } else if (ev.type === "stream_event") {
-          const d = ev.event;
-          if (d?.type === "content_block_delta" && d.delta?.type === "text_delta" && d.delta.text) {
-            sawDelta = true;
-            gm += d.delta.text;
-            await stream.writeSSE({ event: "narration", data: JSON.stringify(d.delta.text) });
-          }
-        } else if (ev.type === "assistant" && !sawDelta) {
-          // fallback: no partial deltas this turn -> emit whole text blocks
-          for (const block of ev.message?.content ?? []) {
-            if (block?.type === "text" && block.text) {
-              gm += block.text;
-              await stream.writeSSE({ event: "narration", data: JSON.stringify(block.text) });
-            }
-          }
-        } else if (ev.type === "result") {
-          if (ev.session_id) sid = ev.session_id;
-          break;
-        }
-        // tool_use / tool_result / thinking deltas: intentionally dropped (immersion).
-      }
-      const after = await readState();
-      const d = diff(before, after);
-      if (Object.keys(d).length) await stream.writeSSE({ event: "delta", data: JSON.stringify(d) });
-      await stream.writeSSE({ event: "state", data: JSON.stringify(after) });
-      await persistTurn(input, gm, sid);
-      await stream.writeSSE({ event: "done", data: JSON.stringify({ sessionId: sid }) });
-    } catch (err) {
-      await stream.writeSSE({ event: "error", data: String(err) });
-    }
-  });
+  undo = await snapshot(input, body.sessionId);
+  return streamSSE(c, (stream) => runTurn(stream, input, body.sessionId).catch((e) => stream.writeSSE({ event: "error", data: String(e) })));
 });
 
-// Spawn the user's own claude; yield parsed stream-json events (token-streamed).
+// Re-roll the last turn: restore files/session to before it, then re-run the same input.
+app.post("/api/regenerate", async (c) => {
+  if (!undo) return c.text("nothing to regenerate", 400);
+  const u = undo;
+  await restore(u);
+  return streamSSE(c, (stream) => runTurn(stream, u.input, u.sid).catch((e) => stream.writeSSE({ event: "error", data: String(e) })));
+});
+
 async function* runClaude(input: string, sessionId?: string): AsyncGenerator<any> {
-  const cmd = [
-    "-p", input,
-    "--output-format", "stream-json", "--verbose", "--include-partial-messages",
-    "--permission-mode", "acceptEdits",
-  ];
+  const cmd = ["-p", input, "--output-format", "stream-json", "--verbose", "--include-partial-messages", "--permission-mode", "acceptEdits"];
   if (sessionId) cmd.push("--resume", sessionId);
   const env = { ...process.env };
-  delete env.ANTHROPIC_API_KEY;   // precedence footgun: these silently override OAuth and bill the API
-  delete env.ANTHROPIC_AUTH_TOKEN;
+  delete env.ANTHROPIC_API_KEY; delete env.ANTHROPIC_AUTH_TOKEN;
   const child = spawn("claude", cmd, { cwd: STORY, env });
   child.on("error", (e) => { throw e; });
   const rl = readline.createInterface({ input: child.stdout! });
-  for await (const line of rl) {
-    const s = line.trim();
-    if (!s) continue;
-    try { yield JSON.parse(s); } catch { /* ignore non-JSON noise */ }
-  }
+  for await (const line of rl) { const s = line.trim(); if (!s) continue; try { yield JSON.parse(s); } catch { /* noise */ } }
 }
 
-// Fake turn for local testing without Claude — emits token-style deltas.
 async function* mockTurn(input: string): AsyncGenerator<any> {
   const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
   const delta = (text: string) => ({ type: "stream_event", event: { type: "content_block_delta", delta: { type: "text_delta", text } } });
   yield { type: "system", subtype: "init", session_id: "mock-session" };
-  await delay(200);
-  const text = `당신은 "${input}".\n\n촛불이 흔들린다. 누군가 당신을 본다 — 잠깐, 그러나 분명히.\n\n(MOCK: 가짜 서술. \`--mock\` 빼면 진짜 claude.)`;
-  for (const tok of text.split(/(\s+)/)) { yield delta(tok); await delay(25); }
+  await delay(150);
+  const text = `*행주질하던 손을 멈추지 않는다.* "왔어, ${input.slice(0, 12)}…?" *잠깐 고개를 든다.* "남은 거 한 잔은 있어. 앉든가." (MOCK)`;
+  for (const tok of text.split(/(\s+)/)) { yield delta(tok); await delay(20); }
   yield { type: "result", subtype: "success", session_id: "mock-session" };
 }
 

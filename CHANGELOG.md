@@ -6,6 +6,13 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Experience — Zeta/Crack-style chat UI** (web). Chat mode now renders a **messenger-style bubble
+  feed**: character avatar + name header, left/right bubbles, and **`*…*` narration → muted italic**
+  (the Korean char-chat genre grammar). Per-message **regenerate** ("↻ 다시" — re-rolls the last turn
+  via an in-memory undo that restores state/log/transcript) and **continue** ("⤵ 이어서"). Animated
+  affinity deltas. Characters can declare an `avatar:` emoji. Our edge over Zeta/Crack: **unlimited
+  free re-rolls, no censorship, no per-use billing** (your own subscription). Verified via typecheck +
+  MOCK (info mode/avatar, regenerate restores transcript).
 - **Platform parity — scene-making + 1:1 character chat** (toward Zeta/Crack/Character.AI/SillyTavern):
   - **Two play modes:** `SCENE.md` `mode: story` (GM, 2nd person) or `mode: chat` (1:1, character
     replies 1st person). New **`companion`** output-style for chat; the play loop is mode-aware.
