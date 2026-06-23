@@ -245,7 +245,11 @@ Refining the built features (P1–P3) is the priority now. Two tracks, core-deep
   the feed + resumes the session on load; verified)
 - [x] B4 state-delta highlights (bridge diffs state before/after → `delta` SSE event; HUD shows ±N)
 - [ ] live real-claude play (user): confirm typed narration + reload restore + deltas in browser
-- [ ] B5 multi-story picker (later in track)
+- [x] B5 multi-story library + **web creation wizard** (Tier 2): bridge multi-story (`?story=`,
+  `/api/stories`, `/api/create`); frontend hub Library → Create form → story-scoped Play
+- [x] Tier 1 chat experience: bubble UI, avatar/name, `*…*`→italic, **regenerate**/continue, affinity deltas
+- [ ] Tier 2 follow-ups: lorebook (`keys:` hint), inline 상태창, branch/rewind
+- [ ] Tier 3 (moat): visibly-holding memory + editable memory panel · Tier 4: portraits (asset-gated)
 
 ### Platform parity — scene-making + 1:1 character chat (live-validated)
 Toward Zeta / Crack / Character.AI / SillyTavern level.

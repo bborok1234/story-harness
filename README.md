@@ -27,16 +27,16 @@ plain files you can read, edit, and version with git.
 
 ## Play in the browser (local web surface)
 
-Prefer a clean GUI over the raw CLI? A local web surface renders **only the narration + a live state
-HUD** (no tool diffs), streaming token-by-token, and restores on reload. It drives **your own** Claude
-Code — nothing is hosted.
+Prefer a GUI over the raw CLI? A local web hub lets you **browse, create, and play** stories — chat
+mode renders messenger-style bubbles (avatar + name, `*narration*` in italic, **regenerate**/continue);
+story mode renders prose. It streams token-by-token, hides tool diffs, and drives **your own** Claude
+Code — nothing hosted, no per-use billing, no censorship.
 
 ```bash
-./scripts/play-web.sh                         # imperial-ball (story mode)
-./scripts/play-web.sh examples/companion-cafe # 1:1 character chat (Yuna)
-./scripts/play-web.sh stories/<name>          # your own story
+./scripts/play-web.sh        # then open http://127.0.0.1:5173
 ```
-Open **http://127.0.0.1:5173**, press **▶ 시작 / Begin**, and play. Needs Node.js; see [`web/`](web/README.md).
+In the browser: pick a story, or **+ 새 스토리** to create one (a form — character, persona, greeting,
+example dialogue — writes a full story to `stories/`, no CLI). Needs Node.js; see [`web/`](web/README.md).
 
 ## How it works
 

@@ -8,13 +8,12 @@ state HUD** — the tool diffs stay hidden. Engine = your own `claude`/subscript
 
 **One command (recommended)** — from the repo root:
 ```bash
-./scripts/play-web.sh                      # the imperial-ball demo (story mode)
-./scripts/play-web.sh examples/companion-cafe   # 1:1 character chat (Yuna)
-./scripts/play-web.sh stories/wuxia-idol        # your own story
+./scripts/play-web.sh        # then open http://127.0.0.1:5173
 ```
-Then open **http://127.0.0.1:5173** and press **▶ 시작 / Begin**. It installs deps on first run and
-drives **your own** Claude Code. The bridge deletes `ANTHROPIC_API_KEY` from the child env, so it
-stays on your subscription automatically.
+You land in a **Library**: pick any story (examples + your `stories/`) or **+ 새 스토리** to create one
+from a form (chat or story mode, persona, character, greeting, example dialogue) — it writes a full OKF
+story to `stories/<slug>/`, no CLI. It installs deps on first run and drives **your own** Claude Code;
+the bridge deletes `ANTHROPIC_API_KEY` from the child env so it stays on your subscription.
 
 **Or manually** (from `web/`):
 ```bash
