@@ -6,6 +6,14 @@ All notable changes to this project are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Builder — web Library + creation wizard** (Tier 2). The web app is now a hub: a **Library** of all
+  stories (examples + `stories/`, with avatar/mode/turn) and a **"+ 새 스토리" creation wizard** — a
+  form (mode chat/story, persona, character with avatar/personality/goal/greeting/example dialogue,
+  opening scene) that writes a complete OKF story to `stories/<slug>/` (no CLI). The bridge is now
+  **multi-story** (`?story=<id>`, path-traversal-guarded): `/api/stories`, `/api/create`, and all
+  play/state/transcript/regenerate endpoints are story-scoped; per-story regenerate undo. Verified via
+  typecheck/build + curl (list/create produce valid OKF, `check.sh` passes; chat→`companion`, story→
+  `storyteller`).
 - **Experience — Zeta/Crack-style chat UI** (web). Chat mode now renders a **messenger-style bubble
   feed**: character avatar + name header, left/right bubbles, and **`*…*` narration → muted italic**
   (the Korean char-chat genre grammar). Per-message **regenerate** ("↻ 다시" — re-rolls the last turn
